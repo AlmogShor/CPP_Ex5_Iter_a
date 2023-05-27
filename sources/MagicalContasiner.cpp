@@ -11,12 +11,12 @@ MagicalContainer::MagicalContainer() {}
 
 MagicalContainer::~MagicalContainer() {}
 
-void MagicalContainer::add(int element) {
+void MagicalContainer::addElement(int element) {
     elements.push_back(element);
     sort();
 }
 
-void MagicalContainer::remove(int element) {
+void MagicalContainer::removeElement(int element) {
     elements.erase(std::remove(elements.begin(), elements.end(), element), elements.end());
     sort();
 }
@@ -45,36 +45,36 @@ bool MagicalContainer::is_prime(int num) {
 
 AscendingIterator::AscendingIterator(std::vector<int>::iterator iter) : current(iter) {}
 
-AscendingIterator::AscendingIterator(const AscendingIterator& other) : current(other.current) {}
+AscendingIterator::AscendingIterator(const AscendingIterator &other) : current(other.current) {}
 
 AscendingIterator::~AscendingIterator() {}
 
-AscendingIterator& AscendingIterator::operator=(const AscendingIterator& other) {
+AscendingIterator &AscendingIterator::operator=(const AscendingIterator &other) {
     current = other.current;
     return *this;
 }
 
-bool AscendingIterator::operator==(const AscendingIterator& other) const {
+bool AscendingIterator::operator==(const AscendingIterator &other) const {
     return current == other.current;
 }
 
-bool AscendingIterator::operator!=(const AscendingIterator& other) const {
+bool AscendingIterator::operator!=(const AscendingIterator &other) const {
     return !(*this == other);
 }
 
-bool AscendingIterator::operator>(const AscendingIterator& other) const {
+bool AscendingIterator::operator>(const AscendingIterator &other) const {
     // implement this
 }
 
-bool AscendingIterator::operator<(const AscendingIterator& other) const {
+bool AscendingIterator::operator<(const AscendingIterator &other) const {
     // implement this
 }
 
-int& AscendingIterator::operator*() {
+int &AscendingIterator::operator*() {
     return *current;
 }
 
-AscendingIterator& AscendingIterator::operator++() {
+AscendingIterator &AscendingIterator::operator++() {
     ++current;
     return *this;
 }
