@@ -43,7 +43,10 @@ bool MagicalContainer::is_prime(int num) {
     // implement a method to check if a number is prime
 }
 
+//ctors
 AscendingIterator::AscendingIterator(std::vector<int>::iterator iter) : current(iter) {}
+
+AscendingIterator::AscendingIterator(MagicalContainer &container) : current(container.elements.begin()) {}
 
 AscendingIterator::AscendingIterator(const AscendingIterator &other) : current(other.current) {}
 
@@ -80,4 +83,5 @@ AscendingIterator &AscendingIterator::operator++() {
 }
 
 // Similar implementation for SideCrossIterator and PrimeIterator
+
 
