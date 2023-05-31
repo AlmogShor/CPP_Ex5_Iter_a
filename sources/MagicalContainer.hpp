@@ -18,15 +18,17 @@ class SideCrossIterator;
 class PrimeIterator;
 namespace ariel {
     class MagicalContainer {
+
+    private:
+        typedef int size;
+        vector<int *> AscendingIteratorElements;
+        vector<int *> SideCrossIteratorElements;
+        vector<int *> PrimeIteratorElements;
     public:
-        typedef int value_type;
-        vector<int*> AscendingIteratorElements;
-        vector<int*> SideCrossIteratorElements;
-        vector<int*> PrimeIteratorElements;
 
         MagicalContainer();
 
-        virtual ~MagicalContainer();
+//        virtual ~MagicalContainer();
 
         void addElement(int element);
 
@@ -34,124 +36,128 @@ namespace ariel {
 
         int size() const;
 
-        virtual iterator begin();
+        int contains(int element);
 
-        virtual iterator end();
+        bool isEmpty() const {
+            return size <= 0;
+        }
 
-        cross_iterator cross_begin();
 
-        cross_iterator cross_end();
+        class Iter {
 
-        prime_iterator prime_begin();
+        public:
+            // three ctors
+            Iter() : pos(0), container(nullptr) {}
 
-        prime_iterator prime_end();
+            Iter(MagicalContainer *container) : pos(0), container(container) {}
 
-    private:
-        std::vector<int> elements;
+            Iter(const Iter &other) : pos(other.pos), container(other.container) {}
 
-        void sort();
+            // dtor
+            virtual ~Iter() {}
 
-        bool is_prime(int num);
+            bool operator==(const Iter &other) const;
 
-        friend class AscendingIterator;
+            bool operator!=(const Iter &other) const;
 
-        friend class SideCrossIterator;
+            bool operator>(const Iter &other) const;
 
-        friend class PrimeIterator;
-    };
+            bool operator<(const Iter &other) const;
+            // continue
 
-    class AscendingIterator : public std::iterator<std::forward_iterator_tag, int> {
-    public:
-        AscendingIterator();
+            // getters
+            int getPos();
 
-        AscendingIterator(MagicalContainer &container);
+            int *getLocation();
 
-        AscendingIterator(const AscendingIterator &other);
+            //setters
+            bool setPos(int new_pos);
 
-        ~AscendingIterator();
+            bool setLocation(int *new_location);
 
-        AscendingIterator &operator=(const AscendingIterator &other);
+        private:
+            int pos;
+            MagicalContainer *container;
 
-        bool operator==(const AscendingIterator &other) const;
+        };
 
-        bool operator!=(const AscendingIterator &other) const;
+        class AscendingIterator : public Iter {
+        public:
+            // three ctors
+            AscendingIterator();
 
-        bool operator>(const AscendingIterator &other) const;
+            AscendingIterator(MagicalContainer &container);
 
-        bool operator<(const AscendingIterator &other) const;
+            AscendingIterator(AscendingIterator &other);
 
-        int &operator*();
+            //dtor
+            ~AscendingIterator();
 
-        AscendingIterator &operator++();
+            AscendingIterator &operator=(const AscendingIterator &other);
 
-    private:
-        std::vector<int>::iterator current;
+            AscendingIterator &operator++();
 
-        friend class MagicalContainer;
-    };
+            //getters
+            AscendingIterator begin();
+
+            AscendingIterator end();
+
+        private:
+
+        };
 
 // Define similar classes for SideCrossIterator and PrimeIterator\
 
-    class SideCrossIterator : public std::iterator<std::forward_iterator_tag, int> {
-    public:
-        SideCrossIterator();
+        class SideCrossIterator : public Iter {
+        public:
+            // three ctors
+            SideCrossIterator();
 
-        SideCrossIterator(MagicalContainer &container);
+            SideCrossIterator(MagicalContainer &container);
 
-        SideCrossIterator(const SideCrossIterator &other);
+            SideCrossIterator(const SideCrossIterator &other);
 
-        ~SideCrossIterator();
+            //dtor
+            ~SideCrossIterator();
 
-        SideCrossIterator &operator=(const SideCrossIterator &other);
+            SideCrossIterator &operator=(const SideCrossIterator &other);
 
-        bool operator==(const SideCrossIterator &other) const;
+            SideCrossIterator &operator++();
 
-        bool operator!=(const SideCrossIterator &other) const;
+            //getters
+            SideCrossIterator begin();
 
-        bool operator>(const SideCrossIterator &other) const;
+            SideCrossIterator end();
 
-        bool operator<(const SideCrossIterator &other) const;
 
-        int &operator*();
+        private:
+        };
 
-        SideCrossIterator &operator++();
+        class PrimeIterator : public Iter {
+        public:
+            // three ctors
+            PrimeIterator();
 
-    private:
-        std::vector<int>::iterator front;
-        std::vector<int>::iterator back;
-        bool isFront;
+            PrimeIterator(MagicalContainer &container);
 
-        friend class MagicalContainer;
-    };
+            PrimeIterator(const PrimeIterator &other);
 
-    class PrimeIterator : public std::iterator<std::forward_iterator_tag, int> {
-    public:
-        PrimeIterator();
+            //dtor
+            ~PrimeIterator();
 
-        PrimeIterator(MagicalContainer &container);
+            PrimeIterator &operator=(const PrimeIterator &other);
 
-        PrimeIterator(const PrimeIterator &other);
+            PrimeIterator &operator++();
 
-        ~PrimeIterator();
+            //getters
 
-        PrimeIterator &operator=(const PrimeIterator &other);
+            PrimeIterator begin();
 
-        bool operator==(const PrimeIterator &other) const;
+            PrimeIterator end();
 
-        bool operator!=(const PrimeIterator &other) const;
+        private:
 
-        bool operator>(const PrimeIterator &other) const;
-
-        bool operator<(const PrimeIterator &other) const;
-
-        int &operator*();
-
-        PrimeIterator &operator++();
-
-    private:
-        std::vector<int>::iterator current;
-
-        friend class MagicalContainer;
+        };
     };
 
 }
