@@ -20,7 +20,7 @@ namespace ariel {
     class MagicalContainer {
 
     private:
-        typedef int size;
+        int _size;
         vector<int *> AscendingIteratorElements;
         vector<int *> SideCrossIteratorElements;
         vector<int *> PrimeIteratorElements;
@@ -34,12 +34,14 @@ namespace ariel {
 
         void removeElement(int element);
 
-        int size() const;
+        int size() const{
+            return this->_size;
+        }
 
         int contains(int element);
 
         bool isEmpty() const {
-            return size <= 0;
+            return this->_size <= 0;
         }
 
 

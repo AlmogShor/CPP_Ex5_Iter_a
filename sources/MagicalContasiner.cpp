@@ -1,75 +1,88 @@
 // MagicalContainer.cpp
 #include "MagicalContainer.hpp"
+#include <algorithm>
 
 namespace ariel {
 
-// MagicalContainer methods
-// ------------------------
+    // Helper function to check if a number is prime
+    bool isPrime(int number) {
+        if (number < 2) return false;
+        for (int i = 2; i*i <= number; i++) {
+            if (number % i == 0) return false;
+        }
+        return true;
+    }
+
+    // MagicalContainer methods
+    // ------------------------
 
     MagicalContainer::MagicalContainer() {
         // Initialize MagicalContainer
+        this->AscendingIteratorElements = vector<int *>();
+        this->SideCrossIteratorElements = vector<int *>();
+        this->PrimeIteratorElements = vector<int *>();
+        this->size = 0;
     }
 
     int MagicalContainer::size() const {
         // Provide the current size of the container
+        return this->size();
     }
 
-// Iterator base class methods
-// ---------------------------
-    int MagicalContainer::Iter::getPos() {
-        return pos;
+    void MagicalContainer::addElement(int element) {
+        AscendingIteratorElements.push_back(element);
+        std::sort(AscendingIteratorElements.begin(), AscendingIteratorElements.end());
+
+        // For SideCrossIterator, push to the back
+        SideCrossIteratorElements.push_back(element);
+
+        // For PrimeIterator, push to the back if it's prime
+        if (isPrime(element)) {
+            PrimeIteratorElements.push_back(element);
+        }
+        this->++size;
     }
 
-    int *MagicalContainer::Iter::getLocation() {
-        // Get the location of the current iterator
-    }
+    // Similarly, removeElement() method can be implemented
+    // Remember to remove from all three containers
 
-    bool MagicalContainer::Iter::setPos(int new_pos) {
-        pos = new_pos;
-        return true;
-    }
+    // Implement Iter, AscendingIterator, SideCrossIterator, PrimeIterator classes here.
 
-    bool MagicalContainer::Iter::setLocation(int *new_location) {
-        // Set the location of the current iterator
-    }
-
-    bool MagicalContainer::Iter::operator==(const Iter &other) const {
-        return pos == other.pos;
-    }
-
-    bool MagicalContainer::Iter::operator!=(const Iter &other) const {
-        return pos != other.pos;
-    }
-
-    bool MagicalContainer::Iter::operator<(const Iter &other) const {
-        return pos < other.pos;
-    }
-
-    bool MagicalContainer::Iter::operator>(const Iter &other) const {
-        return pos > other.pos;
-    }
-
-// AscendingIterator methods
-// -------------------------
+    // Here's an example of what AscendingIterator class might look like
     MagicalContainer::AscendingIterator::AscendingIterator(MagicalContainer &container)
-            : Iter(&container) {
+            : Iter(&container), index(0) {
         // Initialize AscendingIterator
     }
 
     MagicalContainer::AscendingIterator::AscendingIterator(AscendingIterator &other)
-            : Iter(other) {
+            : Iter(other), index(other.index) {
         // Initialize AscendingIterator from another AscendingIterator
     }
 
     MagicalContainer::AscendingIterator &MagicalContainer::AscendingIterator::operator++() {
         // Increment operator for AscendingIterator
+        if (index < container->AscendingIteratorElements.size()) {
+            index++;
+        }
+        return *this;
     }
 
     MagicalContainer::AscendingIterator &MagicalContainer::AscendingIterator::operator=(const AscendingIterator &other) {
         // Assignment operator for AscendingIterator
+        this->index = other.index;
+        this->container = other.container;
+        return *this;
     }
 
-// The same pattern should be applied for SideCrossIterator and PrimeIterator
 
-// End of namespace ariel
+    MagicalContainer::AscendingIterator &MagicalContainer::AscendingIterator::operator++(int) {
+        // Increment operator for AscendingIterator
+        AscendingIterator temp = *this;
+        ++*this;
+        return temp;
+    }
+
+    // Similarly, you can implement SideCrossIterator and PrimeIterator
+
+    // End of namespace ariel
 }
