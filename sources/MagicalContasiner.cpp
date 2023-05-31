@@ -2,7 +2,7 @@
 // Created by shora on 27/05/2023.
 //
 
-#include "MagicalContainer.h"
+#include "MagicalContainer.hpp"
 // MagicalContainer.cpp
 //#include "MagicalContainer.hpp"
 #include <algorithm>
