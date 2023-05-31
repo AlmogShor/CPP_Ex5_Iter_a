@@ -99,6 +99,8 @@ namespace ariel {
 
             AscendingIterator &operator++();
 
+            int operator*();
+
             //getters
             AscendingIterator begin();
 
@@ -126,6 +128,8 @@ namespace ariel {
 
             SideCrossIterator &operator++();
 
+            int operator*();
+
             //getters
             SideCrossIterator begin();
 
@@ -150,6 +154,8 @@ namespace ariel {
             PrimeIterator &operator=(const PrimeIterator &other);
 
             PrimeIterator &operator++();
+
+            int operator*();
 
             //getters
 

@@ -81,6 +81,14 @@ namespace ariel {
         ++*this;
         return temp;
     }
+    int &MagicalContainer::AscendingIterator::operator*() {
+        // Check if index is valid
+        if (index >= 0 && index < container->AscendingIteratorElements.size()) {
+            return container->AscendingIteratorElements[index];
+        }
+        throw std::out_of_range("Iterator out of range");
+    }
+
 
     // Similarly, you can implement SideCrossIterator and PrimeIterator
 
