@@ -22,6 +22,7 @@ namespace ariel {
         this->SideCrossIteratorElements = vector<int>();
         this->PrimeIteratorElements = vector<int>();
         this->_size = 0;
+
     }
 
 
