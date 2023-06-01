@@ -21,9 +21,9 @@ namespace ariel {
 
     private:
         int _size;
-        vector<int *> AscendingIteratorElements;
-        vector<int *> SideCrossIteratorElements;
-        vector<int *> PrimeIteratorElements;
+        vector<int> AscendingIteratorElements;
+        vector<int> SideCrossIteratorElements;
+        vector<int> PrimeIteratorElements;
     public:
 
         MagicalContainer();
@@ -68,7 +68,9 @@ namespace ariel {
             // continue
 
             // getters
-            int getPos();
+            int getPos() const {
+                return this->pos;
+            }
 
             int *getLocation();
 
@@ -108,7 +110,7 @@ namespace ariel {
 
             AscendingIterator &operator++();
 
-            int operator*();
+            int* operator*();
 
             //getters
             AscendingIterator begin();
@@ -137,7 +139,7 @@ namespace ariel {
 
             SideCrossIterator &operator++();
 
-            int operator*();
+            int* operator*();
 
             //getters
             SideCrossIterator begin();
@@ -164,7 +166,7 @@ namespace ariel {
 
             PrimeIterator &operator++();
 
-            int operator*();
+            int* operator*();
 
             //getters
 

@@ -18,9 +18,9 @@ namespace ariel {
 
     MagicalContainer::MagicalContainer() {
         // Initialize MagicalContainer
-        this->AscendingIteratorElements = vector<int *>();
-        this->SideCrossIteratorElements = vector<int *>();
-        this->PrimeIteratorElements = vector<int *>();
+        this->AscendingIteratorElements = vector<int>();
+        this->SideCrossIteratorElements = vector<int>();
+        this->PrimeIteratorElements = vector<int>();
         this->_size = 0;
     }
 
@@ -55,6 +55,14 @@ namespace ariel {
         // Initialize AscendingIterator from another AscendingIterator
     }
 
+    MagicalContainer::AscendingIterator &
+    MagicalContainer::AscendingIterator::operator=(const AscendingIterator &other) {
+        // Assignment operator for AscendingIterator
+        this->setPos(other.getPos());
+        this->setContainer(other.getContainer());
+        return *this;
+    }
+
     MagicalContainer::AscendingIterator &MagicalContainer::AscendingIterator::operator++() {
         // Increment operator for AscendingIterator
         if (this->getPos() < getContainer()->AscendingIteratorElements.size()) {
@@ -63,23 +71,8 @@ namespace ariel {
         return *this;
     }
 
-    MagicalContainer::AscendingIterator &
-    MagicalContainer::AscendingIterator::operator=(const AscendingIterator &other) {
-        // Assignment operator for AscendingIterator
-        this->setPos(other.getPos());
-        this->container = other.getContainer();
-        return *this;
-    }
 
-
-    MagicalContainer::AscendingIterator &MagicalContainer::AscendingIterator::operator++(int) {
-        // Increment operator for AscendingIterator
-        AscendingIterator temp = *this;
-        ++*this;
-        return temp;
-    }
-
-    int &MagicalContainer::AscendingIterator::operator*() {
+    int* &MagicalContainer::AscendingIterator::operator*() {
         // Check if index is valid
         int index = this->getPos();
         if (index >= 0 && index < getContainer()->AscendingIteratorElements.size()) {
@@ -131,7 +124,7 @@ namespace ariel {
         return *this;
     }
 
-    int &MagicalContainer::SideCrossIterator::operator*() {
+    int* &MagicalContainer::SideCrossIterator::operator*() {
         // Check if index is valid
         int index = this->getPos();
         if (index >= 0 && index < getContainer()->SideCrossIteratorElements.size()) {
