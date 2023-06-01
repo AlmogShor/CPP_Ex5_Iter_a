@@ -7,7 +7,7 @@ namespace ariel {
     // Helper function to check if a number is prime
     bool isPrime(int number) {
         if (number < 2) return false;
-        for (int i = 2; i*i <= number; i++) {
+        for (int i = 2; i * i <= number; i++) {
             if (number % i == 0) return false;
         }
         return true;
@@ -21,13 +21,9 @@ namespace ariel {
         this->AscendingIteratorElements = vector<int *>();
         this->SideCrossIteratorElements = vector<int *>();
         this->PrimeIteratorElements = vector<int *>();
-        this->size = 0;
+        this->_size = 0;
     }
 
-    int MagicalContainer::size() const {
-        // Provide the current size of the container
-        return this->size();
-    }
 
     void MagicalContainer::addElement(int element) {
         AscendingIteratorElements.push_back(element);
@@ -40,7 +36,7 @@ namespace ariel {
         if (isPrime(element)) {
             PrimeIteratorElements.push_back(element);
         }
-        this->++size;
+        this->_size++;
     }
 
     // Similarly, removeElement() method can be implemented
@@ -50,27 +46,28 @@ namespace ariel {
 
     // Here's an example of what AscendingIterator class might look like
     MagicalContainer::AscendingIterator::AscendingIterator(MagicalContainer &container)
-            : Iter(&container), index(0) {
+            : Iter(&container) {
         // Initialize AscendingIterator
     }
 
     MagicalContainer::AscendingIterator::AscendingIterator(AscendingIterator &other)
-            : Iter(other), index(other.index) {
+            : Iter(other) {
         // Initialize AscendingIterator from another AscendingIterator
     }
 
     MagicalContainer::AscendingIterator &MagicalContainer::AscendingIterator::operator++() {
         // Increment operator for AscendingIterator
-        if (index < container->AscendingIteratorElements.size()) {
-            index++;
+        if (this->getPos() < getContainer()->AscendingIteratorElements.size()) {
+            this->setPos(this->getPos() + 1);
         }
         return *this;
     }
 
-    MagicalContainer::AscendingIterator &MagicalContainer::AscendingIterator::operator=(const AscendingIterator &other) {
+    MagicalContainer::AscendingIterator &
+    MagicalContainer::AscendingIterator::operator=(const AscendingIterator &other) {
         // Assignment operator for AscendingIterator
-        this->index = other.index;
-        this->container = other.container;
+        this->setPos(other.getPos());
+        this->container = other.getContainer();
         return *this;
     }
 
@@ -81,16 +78,77 @@ namespace ariel {
         ++*this;
         return temp;
     }
+
     int &MagicalContainer::AscendingIterator::operator*() {
         // Check if index is valid
-        if (index >= 0 && index < container->AscendingIteratorElements.size()) {
+        int index = this->getPos();
+        if (index >= 0 && index < getContainer()->AscendingIteratorElements.size()) {
             return container->AscendingIteratorElements[index];
         }
         throw std::out_of_range("Iterator out of range");
     }
 
+    MagicalContainer::AscendingIterator MagicalContainer::AscendingIterator::begin() {
+        // Return an iterator pointing to the first element
+        return AscendingIterator(*this);
+    }
+
+    MagicalContainer::AscendingIterator MagicalContainer::AscendingIterator::end() {
+        // Return an iterator pointing to the past-the-end element
+        return AscendingIterator(*this);
+    }
+
+
 
     // Similarly, you can implement SideCrossIterator and PrimeIterator
+
+    MagicalContainer::SideCrossIterator::SideCrossIterator(MagicalContainer &container)
+            : Iter(&container) {
+        // Initialize SideCrossIterator
+
+    }
+
+    MagicalContainer::SideCrossIterator::SideCrossIterator(SideCrossIterator &other)
+            : Iter(other) {
+        // Initialize SideCrossIterator from another SideCrossIterator
+    }
+
+    MagicalContainer::SideCrossIterator &
+    MagicalContainer::SideCrossIterator::operator=(const SideCrossIterator &other) {
+        // Assignment operator for SideCrossIterator
+        this->setPos(other.getPos());
+        this->setContainer(other.getContainer());
+        return *this;
+    }
+
+    MagicalContainer::SideCrossIterator &MagicalContainer::SideCrossIterator::operator++() {
+        // Increment operator for SideCrossIterator
+        int index = this->getPos();
+        if (index < getContainer()->SideCrossIteratorElements.size()) {
+
+            index++;
+        }
+        return *this;
+    }
+
+    int &MagicalContainer::SideCrossIterator::operator*() {
+        // Check if index is valid
+        int index = this->getPos();
+        if (index >= 0 && index < getContainer()->SideCrossIteratorElements.size()) {
+            return getContainer()->SideCrossIteratorElements[index];
+        }
+        throw std::out_of_range("Iterator out of range");
+    }
+
+    MagicalContainer::SideCrossIterator MagicalContainer::SideCrossIterator::begin() {
+        // Return an iterator pointing to the first element
+        return SideCrossIterator(*this);
+    }
+
+    MagicalContainer::SideCrossIterator MagicalContainer::SideCrossIterator::end() {
+        // Return an iterator pointing to the past-the-end element
+        return SideCrossIterator(*this);
+    }
 
     // End of namespace ariel
 }

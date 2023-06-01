@@ -72,10 +72,19 @@ namespace ariel {
 
             int *getLocation();
 
+            MagicalContainer *getContainer() const {
+                return this->container;
+            }
+
             //setters
             bool setPos(int new_pos);
 
             bool setLocation(int *new_location);
+
+            bool setContainer(MagicalContainer *new_container) {
+                this->container = new_container;
+                return true;
+            }
 
         private:
             int pos;
