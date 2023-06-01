@@ -73,13 +73,16 @@ namespace ariel {
     }
 
 
-    int* &MagicalContainer::AscendingIterator::operator*() {
-        // Check if index is valid
-        int index = this->getPos();
-        if (index >= 0 && index < getContainer()->AscendingIteratorElements.size()) {
-            return container->AscendingIteratorElements[index];
+    int* MagicalContainer::AscendingIterator::operator*() {
+//         Check if index is valid
+        auto index = this->getPos();
+        if (index >= 0 && index < static_cast<int>(getContainer()->AscendingIteratorElements.size())) {
+            return &getContainer()->AscendingIteratorElements[static_cast<std::vector<int>::size_type>(index)];
+
         }
         throw std::out_of_range("Iterator out of range");
+
+        return NULL;
     }
 
     MagicalContainer::AscendingIterator MagicalContainer::AscendingIterator::begin() {
@@ -102,7 +105,7 @@ namespace ariel {
 
     }
 
-    MagicalContainer::SideCrossIterator::SideCrossIterator(SideCrossIterator &other)
+    MagicalContainer::SideCrossIterator::SideCrossIterator(const SideCrossIterator &other)
             : Iter(other) {
         // Initialize SideCrossIterator from another SideCrossIterator
     }
@@ -125,11 +128,12 @@ namespace ariel {
         return *this;
     }
 
-    int* &MagicalContainer::SideCrossIterator::operator*() {
+    int* MagicalContainer::SideCrossIterator::operator*() {
         // Check if index is valid
         int index = this->getPos();
-        if (index >= 0 && index < getContainer()->SideCrossIteratorElements.size()) {
-            return getContainer()->SideCrossIteratorElements[index];
+        if (index >= 0 && index < static_cast<int>(getContainer()->SideCrossIteratorElements.size())) {
+            return &(getContainer()->SideCrossIteratorElements[static_cast<std::vector<int>::size_type>(index)]);
+
         }
         throw std::out_of_range("Iterator out of range");
     }
