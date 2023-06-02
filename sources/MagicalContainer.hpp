@@ -209,8 +209,13 @@ namespace ariel {
         void addElement(int element);
 
         void removeElement(int element);
+        //helper contains function from stack overflow
+        bool contains(const std::vector<int> vec, int element);
 
-        std::vector<int> getElements() const;
+
+        std::vector<int> getElements() const{
+            return elements;
+        }
 
         int size() const;
 

@@ -274,8 +274,28 @@ void MagicalContainer::addElement(int element) {
 }
 
 void MagicalContainer::removeElement(int element) {
+    if (!contains(this->getElements(), element)) {
+        throw std::runtime_error("Element not found");
+    }
     elements.erase(std::remove(elements.begin(), elements.end(), element), elements.end());
 }
+
+bool MagicalContainer::contains(const std::vector<int> vec, int element) {
+    std::vector<int>::const_iterator iter = vec.begin();
+    while (iter != vec.
+
+            end()
+
+            ) {
+        if (*iter == element) {
+            return true;
+        }
+        ++
+                iter;
+    }
+    return false;
+}
+
 
 int MagicalContainer::size() const {
     return elements.size();
