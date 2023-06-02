@@ -263,6 +263,11 @@ std::vector<int>::iterator MagicalContainer::PrimeIterator::end() {
 }
 
 // MagicalContainer implementation
+// Constructors
+MagicalContainer::MagicalContainer() = default;
+
+//dtor
+MagicalContainer::~MagicalContainer() = default;
 
 void MagicalContainer::addElement(int element) {
     elements.push_back(element);
