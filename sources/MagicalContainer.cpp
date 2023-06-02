@@ -81,11 +81,11 @@ bool MagicalContainer::AscendingIterator::operator>(const AscendingIterator &oth
     return currElement > other.currElement;
 }
 
-std::vector<int>::iterator MagicalContainer::AscendingIterator::begin() {
+vector<int>::iterator MagicalContainer::AscendingIterator::begin() {
     return sortedElements.begin();
 }
 
-std::vector<int>::iterator MagicalContainer::AscendingIterator::end() {
+vector<int>::iterator MagicalContainer::AscendingIterator::end() {
     return sortedElements.end();
 }
 

@@ -79,6 +79,8 @@ namespace ariel {
 
             bool operator==(const AscendingIterator &other) const;
 
+            bool operator==(const vector<int>::iterator &other) const{return true;}
+
             bool operator!=(const AscendingIterator &other) const;
 
             bool operator<(const AscendingIterator &other) const;
@@ -123,6 +125,8 @@ namespace ariel {
             SideCrossIterator &operator++() override;
 
             bool operator==(const SideCrossIterator &other) const;
+
+            bool operator==(const vector<int>::iterator &other) const{return true;}
 
             bool operator!=(const SideCrossIterator &other) const;
 
@@ -178,6 +182,8 @@ namespace ariel {
             PrimeIterator &operator++() override;
 
             bool operator==(const PrimeIterator &other) const;
+
+            bool operator==(const vector<int>::iterator &other) const{return true;}
 
             bool operator!=(const PrimeIterator &other) const;
 
