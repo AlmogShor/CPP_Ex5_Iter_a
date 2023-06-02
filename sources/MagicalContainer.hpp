@@ -1,182 +1,56 @@
 //
-// Created by shora on 27/05/2023.
+// Created by shora on 1/06/2023.
 //
 
-// MagicalContainer.hpp
 #pragma once
 
+#include <iostream>
+#include <stdexcept>
 #include <vector>
-#include <iterator>
-#include <exception>
 
 using namespace std;
 
-class AscendingIterator;
-
-class SideCrossIterator;
-
-class PrimeIterator;
-namespace ariel {
+namespace ariel{
     class MagicalContainer {
+        class Iter
+        {
+        public:
+            // variables
+            int *currElem;
+            // ctors
+            Iter() : currElem(nullptr) {}
+            Iter( const Iter &other) = delete; // copy ctor - delete to avoid double free
+            Iter( Iter &&other) noexcept = delete; // move ctor - delete to avoid double free
+            //dtor
+            virtual ~Iter() = default;
 
-    private:
-        int _size;
-        vector<int> AscendingIteratorElements;
-        vector<int> SideCrossIteratorElements;
-        vector<int> PrimeIteratorElements;
+            //operators
+            Iter &operator=(const Iter &other) = delete; // delete to avoid double free
+            Iter &operator=(Iter &&other) noexcept = delete; // delete to avoid double free
+            virtual int &operator*() const = 0;
+            virtual Iter &operator++() = 0;
+            virtual vector<int>::iterator begin() = 0;
+            virtual vector<int>::iterator end() = 0;
+
+        };
     public:
-
-        MagicalContainer();
-
-//        virtual ~MagicalContainer();
-
-        void addElement(int element);
-
-        void removeElement(int element);
-
-        int size() const{
-            return this->_size;
-        }
-
-        int contains(int element);
-
-        bool isEmpty() const {
-            return this->_size <= 0;
-        }
-
-
-        class Iter {
-
-        public:
-            // three ctors
-            Iter() : pos(0), container(nullptr) {}
-
-            Iter(MagicalContainer *container) : pos(0), container(container) {}
-
-            Iter(const Iter &other) : pos(other.pos), container(other.container) {}
-
-            // dtor
-            virtual ~Iter() {}
-
-            bool operator==(const Iter &other) const;
-
-            bool operator!=(const Iter &other) const;
-
-            bool operator>(const Iter &other) const;
-
-            bool operator<(const Iter &other) const;
-            // continue
-
-            // getters
-            int getPos() const {
-                return this->pos;
-            }
-
-            int *getLocation();
-
-            MagicalContainer *getContainer() const {
-                return this->container;
-            }
-
-            //setters
-            bool setPos(int new_pos);
-
-            bool setLocation(int *new_location);
-
-            bool setContainer(MagicalContainer *new_container) {
-                this->container = new_container;
-                return true;
-            }
-
+        class AscendingIterator : public Iter
+        {
         private:
-            int pos;
             MagicalContainer *container;
-
-        };
-
-        class AscendingIterator : public Iter {
+            vector<int> sortedElements;
+            int *currElement;
         public:
-            // three ctors
-            AscendingIterator();
-
+            // ctors
+            AscensingIterator();
             AscendingIterator(MagicalContainer &container);
-
-            AscendingIterator(AscendingIterator &other);
-
-            //dtor
-            ~AscendingIterator();
-
+            AscendingIterator(const AscendingIterator &other);
+            AscendingIterator(AscendingIterator &&other) noexcept;
+            // dtor
+            ~AscendingIterator() override;
+            // operators
             AscendingIterator &operator=(const AscendingIterator &other);
+            AscendingIterator &operator=(AscendingIterator &&other) noexcept;
 
-            AscendingIterator &operator++();
-
-            int* operator*();
-
-            //getters
-            AscendingIterator begin();
-
-            AscendingIterator end();
-
-        private:
-
-        };
-
-// Define similar classes for SideCrossIterator and PrimeIterator\
-
-        class SideCrossIterator : public Iter {
-        public:
-            // three ctors
-            SideCrossIterator();
-
-            SideCrossIterator(MagicalContainer &container);
-
-            SideCrossIterator(const SideCrossIterator &other);
-
-            //dtor
-            ~SideCrossIterator();
-
-            SideCrossIterator &operator=(const SideCrossIterator &other);
-
-            SideCrossIterator &operator++();
-
-            int* operator*();
-
-            //getters
-            SideCrossIterator begin();
-
-            SideCrossIterator end();
-
-
-        private:
-        };
-
-        class PrimeIterator : public Iter {
-        public:
-            // three ctors
-            PrimeIterator();
-
-            PrimeIterator(MagicalContainer &container);
-
-            PrimeIterator(const PrimeIterator &other);
-
-            //dtor
-            ~PrimeIterator();
-
-            PrimeIterator &operator=(const PrimeIterator &other);
-
-            PrimeIterator &operator++();
-
-            int* operator*();
-
-            //getters
-
-            PrimeIterator begin();
-
-            PrimeIterator end();
-
-        private:
-
-        };
     };
-
 }
