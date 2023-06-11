@@ -1,305 +1,58 @@
 //
-// Created by shora on 1/06/2023.
+// created by Almog Shor
 //
 
+#include <stdexcept>
+#include <iostream>
 #include "MagicalContainer.hpp"
+#include "myLinkedList.hpp"
+
+using namespace std;
+using namespace ariel;
+
+/****************************************************/
+/*  MagicalContainer class implementation           */
+/****************************************************/
+
+// ctors
+MagicalContainer::MagicalContainer() : ascendingHead(nullptr), ascendingEnd(nullptr), descendingHead(nullptr),
+                                       descendingEnd(nullptr), primeHead(nullptr), primeEnd(nullptr), _size(0) {
+    this->ascendingEnd = new Node<int>();
+    this->descendingEnd = new Node<int>();
+    this->primeEnd = new Node<int>();
+
+}
 
 
-namespace ariel {
-
-    // AscendingIterator implementation
-
-    MagicalContainer::AscendingIterator::AscendingIterator() : container(nullptr), currElement(nullptr) {}
-
-    MagicalContainer::AscendingIterator::AscendingIterator(MagicalContainer &container)
-            : container(&container), currElement(nullptr) {
-        sortedElements = container.elements;
-        std::sort(sortedElements.begin(), sortedElements.end());
-        currElement = sortedElements.data();
+//private methods
+bool MagicalContainer::isPrime(int num) {
+    if (num <= 1) {
+        return false;
     }
-
-    MagicalContainer::AscendingIterator::AscendingIterator(const AscendingIterator &other)
-            : container(other.container), sortedElements(other.sortedElements), currElement(other.currElement) {}
-
-    MagicalContainer::AscendingIterator::AscendingIterator(AscendingIterator &&other)
-
-    noexcept
-    :
-    container(other
-    .container),
-    sortedElements(std::move(other.sortedElements)
-    ),
-    currElement(other
-    .currElement) {
-}
-
-MagicalContainer::AscendingIterator::~AscendingIterator() = default;
-
-MagicalContainer::AscendingIterator &MagicalContainer::AscendingIterator::operator=(const AscendingIterator &other) {
-    if (this != &other) {
-        container = other.container;
-        sortedElements = other.sortedElements;
-        currElement = other.currElement;
+    if (num == 2) {
+        return true;
     }
-    return *this;
-}
-
-MagicalContainer::AscendingIterator &
-MagicalContainer::AscendingIterator::operator=(AscendingIterator &&other)
-
-noexcept {
-if (this != &other) {
-container = other.container;
-sortedElements = std::move(other.sortedElements);
-currElement = other.currElement;
-}
-return *this;
-}
-
-int &MagicalContainer::AscendingIterator::operator*() {
-    return *currElement;
-}
-
-MagicalContainer::AscendingIterator &MagicalContainer::AscendingIterator::operator++() {
-    ++currElement;
-    return *this;
-}
-
-bool MagicalContainer::AscendingIterator::operator==(const AscendingIterator &other) const {
-    return currElement == other.currElement;
-}
-
-bool MagicalContainer::AscendingIterator::operator!=(const AscendingIterator &other) const {
-    return currElement != other.currElement;
-}
-
-bool MagicalContainer::AscendingIterator::operator<(const AscendingIterator &other) const {
-    return currElement < other.currElement;
-}
-
-bool MagicalContainer::AscendingIterator::operator>(const AscendingIterator &other) const {
-    return currElement > other.currElement;
-}
-
-vector<int>::iterator MagicalContainer::AscendingIterator::begin() {
-    return sortedElements.begin();
-}
-
-vector<int>::iterator MagicalContainer::AscendingIterator::end() {
-    return sortedElements.end();
-}
-
-// SideCrossIterator implementation
-
-MagicalContainer::SideCrossIterator::SideCrossIterator() : container(nullptr), currElement(nullptr) {}
-
-MagicalContainer::SideCrossIterator::SideCrossIterator(MagicalContainer &container)
-        : container(&container), currElement(nullptr) {
-    sortedElements = container.elements;
-    std::sort(sortedElements.begin(), sortedElements.end(), [](int a, int b) {
-        if (a % 2 == 0 && b % 2 == 1) {
-            return true;
-        } else if (a % 2 == 1 && b % 2 == 0) {
+    for (int i = 3; i * i <= num; i += 2) {
+        if (num % i == 0) {
             return false;
-        } else {
-            return a < b;
         }
-    });
-    currElement = sortedElements.data();
-}
-
-MagicalContainer::SideCrossIterator::SideCrossIterator(const SideCrossIterator &other)
-        : container(other.container), sortedElements(other.sortedElements), currElement(other.currElement) {}
-
-MagicalContainer::SideCrossIterator::SideCrossIterator(SideCrossIterator &&other)
-
-noexcept
-:
-container(other
-.container),
-sortedElements(std::move(other.sortedElements)
-),
-currElement(other
-.currElement) {
-}
-
-MagicalContainer::SideCrossIterator::~SideCrossIterator() = default;
-
-MagicalContainer::SideCrossIterator &
-MagicalContainer::SideCrossIterator::operator=(const SideCrossIterator &other) {
-    if (this != &other) {
-        container = other.container;
-        sortedElements = other.sortedElements;
-        currElement = other.currElement;
     }
-    return *this;
+    return true;
 }
 
-MagicalContainer::SideCrossIterator &
-MagicalContainer::SideCrossIterator::operator=(SideCrossIterator &&other)
-
-noexcept {
-if (this != &other) {
-container = other.container;
-sortedElements = std::move(other.sortedElements);
-currElement = other.currElement;
-}
-return *this;
-}
-
-int &MagicalContainer::SideCrossIterator::operator*() {
-    return *currElement;
-}
-
-MagicalContainer::SideCrossIterator &MagicalContainer::SideCrossIterator::operator++() {
-    ++currElement;
-    return *this;
-}
-
-bool MagicalContainer::SideCrossIterator::operator==(const SideCrossIterator &other) const {
-    return currElement == other.currElement;
-}
-
-bool MagicalContainer::SideCrossIterator::operator!=(const SideCrossIterator &other) const {
-    return currElement != other.currElement;
-}
-
-bool MagicalContainer::SideCrossIterator::operator<(const SideCrossIterator &other) const {
-    return currElement < other.currElement;
-}
-
-bool MagicalContainer::SideCrossIterator::operator>(const SideCrossIterator &other) const {
-    return currElement > other.currElement;
-}
-
-std::vector<int>::iterator MagicalContainer::SideCrossIterator::begin() {
-    return sortedElements.begin();
-}
-
-std::vector<int>::iterator MagicalContainer::SideCrossIterator::end() {
-    return sortedElements.end();
-}
-
-// PrimeIterator implementation
-
-MagicalContainer::PrimeIterator::PrimeIterator() : container(nullptr), currElement(nullptr) {}
-
-MagicalContainer::PrimeIterator::PrimeIterator(MagicalContainer &container)
-        : container(&container), currElement(nullptr) {
-    sortedElements = container.elements;
-    sortedElements.erase(std::remove_if(sortedElements.begin(), sortedElements.end(),
-                                        [](int num) { return !isPrime(num); }), sortedElements.end());
-    currElement = sortedElements.data();
-}
-
-MagicalContainer::PrimeIterator::PrimeIterator(const PrimeIterator &other)
-        : container(other.container), sortedElements(other.sortedElements), currElement(other.currElement) {}
-
-MagicalContainer::PrimeIterator::PrimeIterator(PrimeIterator &&other)
-
-noexcept
-:
-container(other
-.container),
-sortedElements(std::move(other.sortedElements)
-),
-currElement(other
-.currElement) {
-}
-
-MagicalContainer::PrimeIterator::~PrimeIterator() = default;
-
-MagicalContainer::PrimeIterator &MagicalContainer::PrimeIterator::operator=(const PrimeIterator &other) {
-    if (this != &other) {
-        container = other.container;
-        sortedElements = other.sortedElements;
-        currElement = other.currElement;
-    }
-    return *this;
-}
-
-MagicalContainer::PrimeIterator &MagicalContainer::PrimeIterator::operator=(PrimeIterator &&other)
-
-noexcept {
-if (this != &other) {
-container = other.container;
-sortedElements = std::move(other.sortedElements);
-currElement = other.currElement;
-}
-return *this;
-}
-
-int &MagicalContainer::PrimeIterator::operator*() {
-    return *currElement;
-}
-
-MagicalContainer::PrimeIterator &MagicalContainer::PrimeIterator::operator++() {
-    ++currElement;
-    return *this;
-}
-
-bool MagicalContainer::PrimeIterator::operator==(const PrimeIterator &other) const {
-    return currElement == other.currElement;
-}
-
-bool MagicalContainer::PrimeIterator::operator!=(const PrimeIterator &other) const {
-    return currElement != other.currElement;
-}
-
-bool MagicalContainer::PrimeIterator::operator<(const PrimeIterator &other) const {
-    return currElement < other.currElement;
-}
-
-bool MagicalContainer::PrimeIterator::operator>(const PrimeIterator &other) const {
-    return currElement > other.currElement;
-}
-
-std::vector<int>::iterator MagicalContainer::PrimeIterator::begin() {
-    return sortedElements.begin();
-}
-
-std::vector<int>::iterator MagicalContainer::PrimeIterator::end() {
-    return sortedElements.end();
-}
-
-// MagicalContainer implementation
-// Constructors
-MagicalContainer::MagicalContainer() = default;
-
-//dtor
-MagicalContainer::~MagicalContainer() = default;
-
-void MagicalContainer::addElement(int element) {
-    elements.push_back(element);
-}
-
-void MagicalContainer::removeElement(int element) {
-    if (!contains(this->getElements(), element)) {
-        throw std::runtime_error("Element not found");
-    }
-    elements.erase(std::remove(elements.begin(), elements.end(), element), elements.end());
-}
-
-bool MagicalContainer::contains(const std::vector<int> vec, int element) {
-    std::vector<int>::const_iterator iter = vec.begin();
-    while (iter != vec.
-
-            end()
-
-            ) {
-        if (*iter == element) {
-            return true;
+int MagicalContainer::exists(int num) {
+    Node<int> *curr = this->ascendingHead;
+    int index = 0;
+    while (curr != nullptr) {
+        if (curr->data == num) {
+            return index;
         }
-        ++
-                iter;
+        curr = curr->next;
+        index++;
     }
-    return false;
+    return -1;
 }
 
 
-int MagicalContainer::size() const {
-    return elements.size();
-}
 
-}  // namespace ariel
 
