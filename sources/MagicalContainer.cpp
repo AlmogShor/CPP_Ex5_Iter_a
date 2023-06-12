@@ -178,7 +178,7 @@ MagicalContainer::AscendingIterator &MagicalContainer::AscendingIterator::operat
         }
 
         bool MagicalContainer::AscendingIterator::operator<(const PrimeIterator &other) const {
-            // TODO: implement
+            throw std::runtime_error("can't compare 2 iterators with different types"); return false;
         }
 
         // increment
@@ -196,9 +196,18 @@ MagicalContainer::AscendingIterator &MagicalContainer::AscendingIterator::operat
             }
             return currElement->data;
         }
-    };
+MagicalContainer::AscendingIterator MagicalContainer::AscendingIterator::begin(){
+    return MagicalContainer::AscendingIterator(*(this->container));
 }
 
+MagicalContainer::AscendingIterator MagicalContainer::AscendingIterator::end(){
+// If getAscendingEnd() returns the last valid element,
+// we need to return an iterator to one past the last element,
+// which is typically represented as an iterator with a null pointer.
+MagicalContainer::AscendingIterator iter(*(this->container));
+iter.currElement = this->container->ascendingEnd;
+return iter;
+}
 
 
 
@@ -213,3 +222,82 @@ MagicalContainer::SideCrossIterator::SideCrossIterator()
 MagicalContainer::SideCrossIterator::SideCrossIterator(const MagicalContainer &container) :
 : container(&container), currElement(container.ascendingHead) {}
 
+
+// placements
+MagicalContainer::SideCrossIterator &MagicalContainer::SideCrossIterator::operator=(const SideCrossIterator &other) {
+    // TODO: implement copying
+    return *this;
+}
+
+MagicalContainer::SideCrossIterator &MagicalContainer::SideCrossIterator::operator=(SideCrossIterator &&other) noexcept {
+// TODO: implement moving
+return *this;
+}
+
+// equality
+bool MagicalContainer::SideCrossIterator::operator==(const SideCrossIterator &other) const {
+    return container == other.container && currElement == other.currElement;
+}
+
+bool MagicalContainer::SideCrossIterator::operator==(const AscendingIterator &other) const {
+    throw std::runtime_error("can't compare 2 iterators with different types"); return false;
+}
+
+bool MagicalContainer::SideCrossIterator::operator==(const PrimeIterator &other) const {
+    throw std::runtime_error("can't compare 2 iterators with different types"); return false;
+}
+
+// inequality
+bool MagicalContainer::SideCrossIterator::operator!=(const SideCrossIterator &other) const {
+    return !(*this == other);
+}
+
+bool MagicalContainer::SideCrossIterator::operator!=(const AscendingIterator &other) const {
+    throw std::runtime_error("can't compare 2 iterators with different types"); return false;
+}
+
+bool MagicalContainer::SideCrossIterator::operator!=(const PrimeIterator &other) const {
+    throw std::runtime_error("can't compare 2 iterators with different types"); return false;
+}
+
+// bigger than
+bool MagicalContainer::SideCrossIterator::operator>(const SideCrossIterator &other) const {
+    // TODO: implement
+}
+
+bool MagicalContainer::SideCrossIterator::operator>(const AscendingIterator &other) const {
+    throw std::runtime_error("can't compare 2 iterators with different types"); return false;
+}
+
+bool MagicalContainer::SideCrossIterator::operator>(const PrimeIterator &other) const {
+    throw std::runtime_error("can't compare 2 iterators with different types"); return false;
+}
+
+// smaller than
+bool MagicalContainer::SideCrossIterator::operator<(const SideCrossIterator &other) const {
+    // TODO: implement
+}
+
+bool MagicalContainer::SideCrossIterator::operator<(const AscendingIterator &other) const {
+    throw std::runtime_error("can't compare 2 iterators with different types"); return false;
+}
+
+bool MagicalContainer::SideCrossIterator::operator<(const PrimeIterator &other) const {
+    throw std::runtime_error("can't compare 2 iterators with different types"); return false;
+}
+
+// increment
+MagicalContainer::SideCrossIterator MagicalContainer::SideCrossIterator::operator++() {
+    if (currElement != nullptr) {
+        currElement = currElement->next;
+    }
+    return *this;
+}
+
+// ptr operator
+int MagicalContainer::SideCrossIterator::operator*() {
+    if (currElement == nullptr) {
+        throw std::out_of_range("Invalid access. Iterator is at the end");
+    }
+    return currElement->data;
+}
