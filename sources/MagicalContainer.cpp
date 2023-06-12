@@ -1,6 +1,9 @@
 //
 // Created by shora on 1/06/2023.
 //
+//
+// Created by shora on 1/06/2023.
+//
 
 #include <stdexcept>
 #include <iostream>
@@ -21,26 +24,9 @@ MagicalContainer::MagicalContainer()
           primeHead(nullptr), primeEnd(nullptr),
           _size(0) {}
 
-MagicalContainer::MagicalContainer(const MagicalContainer &other)
-        : _size(other._size) {
-    // TODO: Copy the linked lists. This will likely involve creating new nodes
-    // and setting their next pointers to create a copy of the original list.
-}
+//copy ctor - in the hpp file
 
-MagicalContainer::MagicalContainer(MagicalContainer &&other) noexcept
-: ascendingHead(other.ascendingHead),
-ascendingEnd(other.ascendingEnd),
-descendingHead(other.descendingHead),
-descendingEnd(other.descendingEnd),
-primeHead(other.primeHead),
-primeEnd(other.primeEnd),
-_size(other._size) {
-// Reset other's pointers to ensure it doesn't delete the nodes when it's destructed
-other.ascendingHead = other.ascendingEnd = nullptr;
-other.descendingHead = other.descendingEnd = nullptr;
-other.primeHead = other.primeEnd = nullptr;
-other._size = 0;
-}
+// move ctor - in the hpp file
 
 // The destructor should delete all the nodes to prevent memory leaks
 MagicalContainer::~MagicalContainer() {
@@ -74,7 +60,9 @@ int MagicalContainer::exists(int num) {
 
 void MagicalContainer::addElement(int num) {
     if (exists(num) == -1) {
-        Node<int>::insertAtPosition(new Node<int>(num), 0, &ascendingHead);
+        // Node<int>::insertAtPosition(new Node<int>(num), 0, &ascendingHead);
+        // TODO: You need to implement the insertAtPosition function in your Node class
+        // and then use it here.
         _size++;
     }
 }
@@ -82,7 +70,9 @@ void MagicalContainer::addElement(int num) {
 void MagicalContainer::removeElement(int num) {
     int index = exists(num);
     if (index != -1) {
-        Node<int>::removeAtPosition(index, &ascendingHead);
+        // Node<int>::removeAtPosition(index, &ascendingHead);
+        // TODO: You need to implement the removeAtPosition function in your Node class
+        // and then use it here.
         _size--;
     }
 }
@@ -113,22 +103,21 @@ other.container = nullptr;
 other.currElement = nullptr;
 }
 
-        // dtor
-        MagicalContainer::AscendingIterator::~AscendingIterator() {
+// dtor
+MagicalContainer::AscendingIterator::~AscendingIterator() {
 
-        }
+}
 
-        // placements
-        MagicalContainer::AscendingIterator &MagicalContainer::AscendingIterator::operator=(const AscendingIterator &other) {
-            // TODO: implement copying
-            return *this;
-        }
+// placements
+MagicalContainer::AscendingIterator &MagicalContainer::AscendingIterator::operator=(const AscendingIterator &other) {
+    // TODO: implement copying
+    return *this;
+}
 
 MagicalContainer::AscendingIterator &MagicalContainer::AscendingIterator::operator=(AscendingIterator &&other) noexcept {
-            // TODO: implement moving
-            return *this;
-        }
-
+// TODO: implement moving
+return *this;
+}
         // equality
         bool MagicalContainer::AscendingIterator::operator==(const AscendingIterator &other) const {
             return container == other.container && currElement == other.currElement;
@@ -158,6 +147,7 @@ MagicalContainer::AscendingIterator &MagicalContainer::AscendingIterator::operat
         // bigger than
         bool MagicalContainer::AscendingIterator::operator>(const AscendingIterator &other) const {
             // TODO: implement
+            return false;
         }
 
         bool MagicalContainer::AscendingIterator::operator>(const SideCrossIterator &other) const {
@@ -171,6 +161,7 @@ MagicalContainer::AscendingIterator &MagicalContainer::AscendingIterator::operat
         // smaller than
         bool MagicalContainer::AscendingIterator::operator<(const AscendingIterator &other) const {
             // TODO: implement
+            return false;
         }
 
         bool MagicalContainer::AscendingIterator::operator<(const SideCrossIterator &other) const {
@@ -182,7 +173,7 @@ MagicalContainer::AscendingIterator &MagicalContainer::AscendingIterator::operat
         }
 
         // increment
-        MagicalContainer::AscendingIterator MagicalContainer::AscendingIterator::operator++() {
+        MagicalContainer::AscendingIterator &MagicalContainer::AscendingIterator::operator++() {
             if (currElement != nullptr) {
                 currElement = currElement->next;
             }
@@ -217,10 +208,10 @@ return iter;
 
 // SideCrossIterator ctors
 MagicalContainer::SideCrossIterator::SideCrossIterator()
-        : container(nullptr), currElement(nullptr) {}
+        : container(nullptr), currFrontElement(nullptr), currBackElement(nullptr), isFront(false) {}
 
 MagicalContainer::SideCrossIterator::SideCrossIterator(const MagicalContainer &container) :
-: container(&container), currElement(container.ascendingHead) {}
+: container(&container), currFrontElement(container.ascendingHead), currBackElement(container.descendingEnd), isFront(true) {}
 
 
 // placements
@@ -236,7 +227,8 @@ return *this;
 
 // equality
 bool MagicalContainer::SideCrossIterator::operator==(const SideCrossIterator &other) const {
-    return container == other.container && currElement == other.currElement;
+    return container == other.container && currFrontElement == other.currFrontElement &&
+           currBackElement == other.currBackElement && isFront == other.isFront;
 }
 
 bool MagicalContainer::SideCrossIterator::operator==(const AscendingIterator &other) const {
@@ -287,7 +279,7 @@ bool MagicalContainer::SideCrossIterator::operator<(const PrimeIterator &other) 
 }
 
 // increment
-MagicalContainer::SideCrossIterator MagicalContainer::SideCrossIterator::operator++() {
+MagicalContainer::SideCrossIterator &MagicalContainer::SideCrossIterator::operator++() {
     if (currElement != nullptr) {
         currElement = currElement->next;
     }
@@ -296,8 +288,118 @@ MagicalContainer::SideCrossIterator MagicalContainer::SideCrossIterator::operato
 
 // ptr operator
 int MagicalContainer::SideCrossIterator::operator*() {
+    if (this->currFrontElement == nullptr) {
+        throw std::out_of_range("Invalid access. Iterator is at the end");
+    }
+    return this->currFrontElement->data;
+}
+
+MagicalContainer::SideCrossIterator MagicalContainer::SideCrossIterator::begin(){
+    return MagicalContainer::SideCrossIterator(*(this->container));
+}
+
+MagicalContainer::SideCrossIterator MagicalContainer::SideCrossIterator::end(){
+    return NULL;
+}
+
+/****************************************************/
+/*  PrimeIterator class implementation               */
+/****************************************************/
+
+//ctors
+PrimeIterator();
+
+PrimeIterator(const MagicalContainer &container);
+
+PrimeIterator(const PrimeIterator &other);
+
+PrimeIterator(PrimeIterator &&other)
+
+noexcept; // move ctor
+// dtor
+MagicalContainer::PrimeIterator::~PrimeIterator(){
+
+}
+
+// operators
+//placements
+PrimeIterator &operator=(const PrimeIterator &other);
+
+PrimeIterator &operator=(PrimeIterator &&other)
+
+noexcept; // move assignment
+/// equality
+bool MagicalContainer::SideCrossIterator::operator==(const SideCrossIterator &other) const {
+    return container == other.container && currElement == other.currElement;
+}
+
+bool MagicalContainer::SideCrossIterator::operator==(const AscendingIterator &other) const {
+    throw std::runtime_error("can't compare 2 iterators with different types"); return false;
+}
+
+bool MagicalContainer::SideCrossIterator::operator==(const PrimeIterator &other) const {
+    throw std::runtime_error("can't compare 2 iterators with different types"); return false;
+}
+
+// inequality
+bool MagicalContainer::PrimeIterator::operator!=(const PrimeIterator &other) const {
+    return !(*this == other);
+}
+
+bool MagicalContainer::PrimeIterator::operator!=(const AscendingIterator &other) const {
+    throw std::runtime_error("can't compare 2 iterators with different types"); return false;
+}
+
+bool MagicalContainer::PrimeIterator::operator!=(const SideCrossIterator &other) const {
+    throw std::runtime_error("can't compare 2 iterators with different types"); return false;
+}
+
+// bigger than
+bool MagicalContainer::PrimeIterator::operator>(const PrimeIterator &other) const {
+    // TODO: implement
+}
+
+bool MagicalContainer::PrimeIterator::operator>(const AscendingIterator &other) const {
+    throw std::runtime_error("can't compare 2 iterators with different types"); return false;
+}
+
+bool MagicalContainer::PrimeIterator::operator>(const SideCrossIterator &other) const {
+    throw std::runtime_error("can't compare 2 iterators with different types"); return false;
+}
+
+// smaller than
+bool MagicalContainer::PrimeIterator::operator<(const PrimeIterator &other) const {
+    // TODO: implement
+}
+
+bool MagicalContainer::PrimeIterator::operator<(const AscendingIterator &other) const {
+    throw std::runtime_error("can't compare 2 iterators with different types"); return false;
+}
+
+bool MagicalContainer::PrimeIterator::operator<(const SideCrossIterator &other) const {
+    throw std::runtime_error("can't compare 2 iterators with different types"); return false;
+}
+
+// increment
+MagicalContainer::PrimeIterator MagicalContainer::PrimeIterator::operator++() {
+    if (currElement != nullptr) {
+        currElement = currElement->next;
+    }
+    return *this;
+}
+
+// ptr operator
+int MagicalContainer::PrimeIterator::operator*() {
     if (currElement == nullptr) {
         throw std::out_of_range("Invalid access. Iterator is at the end");
     }
     return currElement->data;
+}
+
+MagicalContainer::PrimeIterator MagicalContainer::PrimeIterator::begin(){
+    return MagicalContainer::PrimeIterator(*(this->container));
+}
+
+MagicalContainer::PrimeIterator MagicalContainer::PrimeIterator::end(){
+    return NULL;
 }
