@@ -1,5 +1,5 @@
 //
-// created by Almog Shor
+// Created by shora on 1/06/2023.
 //
 
 #include <stdexcept>
@@ -111,6 +111,92 @@ MagicalContainer::AscendingIterator::AscendingIterator(AscendingIterator &&other
 currElement(other.currElement) {
 other.container = nullptr;
 other.currElement = nullptr;
+}
+
+        // dtor
+        MagicalContainer::AscendingIterator::~AscendingIterator() {
+
+        }
+
+        // placements
+        MagicalContainer::AscendingIterator &MagicalContainer::AscendingIterator::operator=(const AscendingIterator &other) {
+            // TODO: implement copying
+            return *this;
+        }
+
+MagicalContainer::AscendingIterator &MagicalContainer::AscendingIterator::operator=(AscendingIterator &&other) noexcept {
+            // TODO: implement moving
+            return *this;
+        }
+
+        // equality
+        bool MagicalContainer::AscendingIterator::operator==(const AscendingIterator &other) const {
+            return container == other.container && currElement == other.currElement;
+        }
+
+        bool MagicalContainer::AscendingIterator::operator==(const SideCrossIterator &other) const {
+            throw std::runtime_error("can't compare 2 iterators with different types"); return false;
+        }
+
+        bool MagicalContainer::AscendingIterator::operator==(const PrimeIterator &other) const {
+            throw std::runtime_error("can't compare 2 iterators with different types"); return false;
+        }
+
+        // inequality
+        bool MagicalContainer::AscendingIterator::operator!=(const AscendingIterator &other) const {
+            return !(*this == other);
+        }
+
+        bool MagicalContainer::AscendingIterator::operator!=(const SideCrossIterator &other) const {
+            throw std::runtime_error("can't compare 2 iterators with different types"); return false;
+        }
+
+        bool MagicalContainer::AscendingIterator::operator!=(const PrimeIterator &other) const {
+            throw std::runtime_error("can't compare 2 iterators with different types"); return false;
+        }
+
+        // bigger than
+        bool MagicalContainer::AscendingIterator::operator>(const AscendingIterator &other) const {
+            // TODO: implement
+        }
+
+        bool MagicalContainer::AscendingIterator::operator>(const SideCrossIterator &other) const {
+            throw std::runtime_error("can't compare 2 iterators with different types"); return false;
+        }
+
+        bool MagicalContainer::AscendingIterator::operator>(const PrimeIterator &other) const {
+            throw std::runtime_error("can't compare 2 iterators with different types"); return false;
+        }
+
+        // smaller than
+        bool MagicalContainer::AscendingIterator::operator<(const AscendingIterator &other) const {
+            // TODO: implement
+        }
+
+        bool MagicalContainer::AscendingIterator::operator<(const SideCrossIterator &other) const {
+            throw std::runtime_error("can't compare 2 iterators with different types"); return false;
+        }
+
+        bool MagicalContainer::AscendingIterator::operator<(const PrimeIterator &other) const {
+            // TODO: implement
+        }
+
+        // increment
+        MagicalContainer::AscendingIterator MagicalContainer::AscendingIterator::operator++() {
+            if (currElement != nullptr) {
+                currElement = currElement->next;
+            }
+            return *this;
+        }
+
+        // ptr operator
+        int MagicalContainer::AscendingIterator::operator*() {
+            if (currElement == nullptr) {
+                throw std::out_of_range("Invalid access. Iterator is at the end");
+            }
+            return currElement->data;
+        }
+    };
 }
 
 
