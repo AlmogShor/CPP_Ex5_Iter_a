@@ -112,3 +112,18 @@ currElement(other.currElement) {
 other.container = nullptr;
 other.currElement = nullptr;
 }
+
+
+
+
+/****************************************************/
+/*  SideCrossIterator class implementation           */
+/****************************************************/
+
+// SideCrossIterator ctors
+MagicalContainer::SideCrossIterator::SideCrossIterator()
+        : container(nullptr), currElement(nullptr) {}
+
+MagicalContainer::SideCrossIterator::SideCrossIterator(const MagicalContainer &container) :
+: container(&container), currElement(container.ascendingHead) {}
+
