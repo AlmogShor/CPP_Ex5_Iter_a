@@ -228,19 +228,29 @@ return iter;
 MagicalContainer::SideCrossIterator::SideCrossIterator()
         : container(nullptr), currFrontElement(nullptr), currBackElement(nullptr), isFront(false) {}
 
-        //TODO need to fix
+
 MagicalContainer::SideCrossIterator::SideCrossIterator(const MagicalContainer &container)
 : container(&container), currFrontElement(container.ascendingHead), currBackElement(container.descendingEnd), isFront(true) {}
 
 
 // placements
 MagicalContainer::SideCrossIterator &MagicalContainer::SideCrossIterator::operator=(const SideCrossIterator &other) {
-    // TODO: implement copying
+    if(this->container != other.container) throw std::runtime_error("can't assign between two different containers");
+    this->container = other.container;
+    this->currFrontElement = other.currFrontElement;
+    this->currBackElement = other.currBackElement;
+    this->isFront = other.isFront;
     return *this;
 }
 
 MagicalContainer::SideCrossIterator &MagicalContainer::SideCrossIterator::operator=(SideCrossIterator &&other) noexcept {
-// TODO: implement moving
+this->container = other.container;
+this->currFrontElement = other.currFrontElement;
+this->currBackElement = other.currBackElement;
+this->isFront = other.isFront;
+other.container = nullptr;
+other.currFrontElement = nullptr;
+other.currBackElement = nullptr;
 return *this;
 }
 
@@ -278,8 +288,30 @@ bool MagicalContainer::SideCrossIterator::operator!=(const PrimeIterator &other)
 
 // bigger than
 bool MagicalContainer::SideCrossIterator::operator>(const SideCrossIterator &other) const {
-    // TODO: implement
-    return false;
+    if ((other.currBackElement == nullptr || other.currFrontElement == nullptr) &&
+        (this->currBackElement == nullptr || this->currFrontElement == nullptr))
+        return false; // both this and other at end
+    if (other.currBackElement == nullptr || other.currFrontElement == nullptr) return false; // other at end
+    if (this->currBackElement == nullptr || this->currFrontElement == nullptr) return true; // this at end
+    if (this->isFront && other.isFront) { // both at front
+        if (this->currFrontElement->index == 0)
+            return other.currFrontElement->index == 0 ? false : true; // special case where this at index 0
+        return this->currFrontElement->index > other.currFrontElement->index; // compute by index
+    } else if (this->isFront &&
+               (!other.isFront)) { // this at front (went through odd num of elments) other at back (went through even num of elments)
+        if (this->currFrontElement->index == 0)
+            return other.currBackElement->index == 0 ? false : true; // special case where this at index 0
+        return ((2 * this->currFrontElement->index) + 1) > (2 * other.currBackElement->index); // compute by index
+    } else if ((!this->isFront) &&
+               other.isFront) { // this at end (went through even num of elments) other at front (went through odd num of elments)
+        if (this->currBackElement->index == 0)
+            return other.currFrontElement->index == 0 ? true : false; // special case where this at index 0
+        return (2 * this->currBackElement->index) > ((2 * other.currFrontElement->index) + 1); // compute by index
+    } else { // both at end
+        if (this->currBackElement->index == 0)
+            return other.currBackElement->index == 0 ? false : true; // special case where this at index 0
+        return this->currBackElement->index > other.currBackElement->index; // compute by index
+    }
 }
 
 bool MagicalContainer::SideCrossIterator::operator>(const AscendingIterator &other) const {
@@ -292,8 +324,8 @@ bool MagicalContainer::SideCrossIterator::operator>(const PrimeIterator &other) 
 
 // smaller than
 bool MagicalContainer::SideCrossIterator::operator<(const SideCrossIterator &other) const {
-    // TODO: implement
-    return false;
+
+    return other > *this;
 }
 
 bool MagicalContainer::SideCrossIterator::operator<(const AscendingIterator &other) const {
@@ -355,9 +387,11 @@ MagicalContainer::PrimeIterator::PrimeIterator() {
 
 }
 
-MagicalContainer::PrimeIterator::PrimeIterator(const MagicalContainer &container) {
+MagicalContainer::PrimeIterator::PrimeIterator(const MagicalContainer &container): container(&container), currElement(container.primeHead) {
 
 }
+
+
 
 MagicalContainer::PrimeIterator::PrimeIterator(const PrimeIterator &other) {
 
@@ -374,13 +408,19 @@ MagicalContainer::PrimeIterator::~PrimeIterator(){
 // operators
 //placements
 MagicalContainer::PrimeIterator &MagicalContainer::PrimeIterator::operator=(const PrimeIterator &other) {
-
+    if(this->container != other.container) throw std::runtime_error("can't assign between two different containers");
+    this->container = other.container;
+    this->currElement = other.currElement;
     return *this;
 }
 
-MagicalContainer::PrimeIterator &MagicalContainer::PrimeIterator::operator=(PrimeIterator &&other) noexcept {
 
-    return *this;
+MagicalContainer::PrimeIterator &MagicalContainer::PrimeIterator::operator=(PrimeIterator &&other) noexcept {
+this->container = other.container;
+this->currElement = other.currElement;
+other.container = nullptr;
+other.currElement = nullptr;
+return *this;
 } // move assignment
 
 /// equality
@@ -411,8 +451,10 @@ bool MagicalContainer::PrimeIterator::operator!=(const SideCrossIterator &other)
 
 // bigger than
 bool MagicalContainer::PrimeIterator::operator>(const PrimeIterator &other) const {
-    // TODO: implement
-    return false;
+    if(other.currElement->isValid() == true && this->currElement->isValid() == true ) return false; //this and other are at end
+    if(other.currElement->isValid() == true ) return false; //other at end
+    if(this->currElement->isValid()) return true; //this at end
+    return *(this->currElement->getDataPoint()) > *(other.currElement->getDataPoint());
 }
 
 bool MagicalContainer::PrimeIterator::operator>(const AscendingIterator &other) const {
@@ -425,8 +467,7 @@ bool MagicalContainer::PrimeIterator::operator>(const SideCrossIterator &other) 
 
 // smaller than
 bool MagicalContainer::PrimeIterator::operator<(const PrimeIterator &other) const {
-    // TODO: implement
-    return false;
+    return other > *this;
 }
 
 bool MagicalContainer::PrimeIterator::operator<(const AscendingIterator &other) const {
@@ -439,18 +480,19 @@ bool MagicalContainer::PrimeIterator::operator<(const SideCrossIterator &other) 
 
 // increment
 MagicalContainer::PrimeIterator &MagicalContainer::PrimeIterator::operator++() {
-    if (currElement != nullptr) {
-        currElement = currElement->next;
+    if (currElement->isValid()) {
+        throw std::runtime_error("out of range");
     }
+    currElement = currElement->next;
     return *this;
 }
 
 // ptr operator
 int MagicalContainer::PrimeIterator::operator*() {
-    if (currElement == nullptr) {
+    if (currElement->isValid()) {
         throw std::out_of_range("Invalid access. Iterator is at the end");
     }
-    return currElement->data;
+    return *(currElement->getDataPoint());
 }
 
 MagicalContainer::PrimeIterator MagicalContainer::PrimeIterator::begin(){
