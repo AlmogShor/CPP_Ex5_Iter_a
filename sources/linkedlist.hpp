@@ -45,15 +45,16 @@ public:
 
     void insert(int value);
 
-    void removeElement(int element);
+    void remove(int elem);
 
-    size_t getSize() const;
+    size_t getSize();
 
     Node *getLast();
 
     Node *getHead();
 
-    Node *At(size_t index);
+    Node *at(size_t index);
 
     void display();
-}
+};
+

@@ -3,6 +3,7 @@
 //
 
 #pragma once
+
 #include <vector>
 #include <iostream>
 #include <stdexcept>
@@ -10,59 +11,91 @@
 
 #include "linkedList.hpp"
 
-namespace ariel
-{
+bool isPrime(int n) {
+    if (n <= 1) return false;
+    if (n <= 3) return true;
+    if (n % 2 == 0 || n % 3 == 0) return false;
 
-    class MagicalContainer
-    {
+    for (int i = 5; i * i <= n; i = i + 2)
+        if (n % i == 0)
+            return false;
+
+    return true;
+}
+
+namespace ariel {
+
+    class MagicalContainer {
     private:
-        linkedList ascendingVector;
-        std::vector<int> primePointers;
+        linkedList ascendingList;
+        std::vector<int *> primePointers;
+        Node *endOfSideCross = nullptr;
 
     public:
         MagicalContainer();
-        MagicalContainer(const MagicalContainer &other)= default;
-        MagicalContainer(MagicalContainer &&other) noexcept= default;
-        MagicalContainer &operator=(const MagicalContainer &other)= default;
-        ~MagicalContainer();
-        void addElement(int element);
-        void removeElement(int element);
-        size_t size() const;
 
-        class AscendingIterator
-        {
+        MagicalContainer(const MagicalContainer &other) = default;
+
+        MagicalContainer(MagicalContainer &&other)
+
+        noexcept =
+        default;
+
+        MagicalContainer &operator=(const MagicalContainer &other) = default;
+
+        ~MagicalContainer();
+
+        void addElement(int element);
+
+        void removeElement(int element);
+
+        size_t size();
+
+        class AscendingIterator {
         private:
             MagicalContainer &container;
             Node *current;
-            int index;
+            int idx;
 
         public:
-            AscendingIterator(MagicalContainer &cont);
-            AscendingIterator(MagicalContainer &cont, Node *cur);
+            AscendingIterator(MagicalContainer &container);
+
+            AscendingIterator(MagicalContainer &container, Node *curr);
+
             AscendingIterator(const AscendingIterator &other);
+
             ~AscendingIterator();
 
             AscendingIterator &operator=(const AscendingIterator &other);
+
             bool operator==(const AscendingIterator &other) const;
+
             bool operator<(const AscendingIterator &other) const;
+
             bool operator>(const AscendingIterator &other) const;
+
             bool operator!=(const AscendingIterator &other) const;
 
             int operator*() const;
 
             AscendingIterator &operator++();
+
             AscendingIterator begin() const;
+
             AscendingIterator end() const;
 
             // Move constructor
-            AscendingIterator(AscendingIterator&& other)noexcept;
+            AscendingIterator(AscendingIterator &&other)
+
+            noexcept;
 
             // Move assignment operator
-            AscendingIterator& operator=(AscendingIterator&& other) noexcept;
+            AscendingIterator &operator=(AscendingIterator &&other)
+
+            noexcept;
         };
 
-        class SideCrossIterator
-        {
+        class SideCrossIterator {
         private:
             MagicalContainer &container;
             Node *tail;
@@ -71,56 +104,79 @@ namespace ariel
 
         public:
             SideCrossIterator(MagicalContainer &cont);
+
             SideCrossIterator(const SideCrossIterator &other);
+
             ~SideCrossIterator();
 
             SideCrossIterator &operator=(const SideCrossIterator &other);
 
             bool operator==(const SideCrossIterator &other) const;
+
             bool operator<(const SideCrossIterator &other) const;
+
             bool operator>(const SideCrossIterator &other) const;
+
             bool operator!=(const SideCrossIterator &other) const;
 
             int operator*() const;
 
             SideCrossIterator &operator++();
+
             SideCrossIterator begin() const;
+
             SideCrossIterator end() const;
 
             // Move constructor
-            SideCrossIterator(SideCrossIterator&& other) noexcept;
+            SideCrossIterator(SideCrossIterator &&other)
+
+            noexcept;
 
             // Move assignment operator
-            SideCrossIterator& operator=(SideCrossIterator&& other) noexcept;
+            SideCrossIterator &operator=(SideCrossIterator &&other)
+
+            noexcept;
         };
 
-        class PrimeIterator
-        {
+        class PrimeIterator {
         private:
             MagicalContainer &container;
             size_t currentIndex;
 
         public:
             PrimeIterator(MagicalContainer &cont, size_t index = 0);
+
             PrimeIterator(const PrimeIterator &other);
+
             ~PrimeIterator();
 
             PrimeIterator &operator=(const PrimeIterator &other);
 
             bool operator==(const PrimeIterator &other) const;
+
             bool operator>(const PrimeIterator &other) const;
+
             bool operator<(const PrimeIterator &other) const;
+
             bool operator!=(const PrimeIterator &other) const;
 
             int operator*() const;
 
             PrimeIterator &operator++();
+
             PrimeIterator begin() const;
+
             PrimeIterator end() const;
 
             // Move constructor
-            PrimeIterator(PrimeIterator&& other) noexcept;
+            PrimeIterator(PrimeIterator &&other)
+
+            noexcept;
 
             // Move assignment operator
-            PrimeIterator& operator=(PrimeIterator&& other) noexcept;
+            PrimeIterator &operator=(PrimeIterator &&other)
+
+            noexcept;
         };
+    };
+}

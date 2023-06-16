@@ -4,7 +4,7 @@
 
 #include "linkedlist.hpp"
 
-linkedlist::linkedList() : head(nullptr), tail(nullptr) {}
+linkedList::linkedList() : head(nullptr), tail(nullptr) {}
 
 
 linkedList::~linkedList(){
@@ -45,12 +45,12 @@ void linkedList::insert(int value){
     this->size++;
 }
 
-void linkedList::removeElement(int element){
+void linkedList::remove(int elem){
     if (head == nullptr) {
         return;
     }
 
-    if (head->data == element) {
+    if (head->data == elem) {
 
         Node *temp = head;
         head = head->next;
@@ -66,7 +66,7 @@ void linkedList::removeElement(int element){
 
     Node *curr = head;
     while (curr->next != nullptr) {
-        if (curr->next->data == element) {
+        if (curr->next->data == elem) {
             Node *temp = curr->next;
             curr->next = curr->next->next;
             if (curr->next == nullptr) {
@@ -95,7 +95,7 @@ Node *linkedList::getHead(){
     return this->head;
 }
 
-Node *linkedList::At(size_t index){
+Node *linkedList::at(size_t index){
     if (index >= size) {
         return nullptr;
     }
