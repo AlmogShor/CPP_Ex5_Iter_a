@@ -137,7 +137,7 @@ namespace ariel {
         return *this;
     }
 
-    MagicalContainer::AscendingIterator MagicalContainer::AscenedingIterator::begin(){
+    MagicalContainer::AscendingIterator MagicalContainer::AscendingIterator::begin(){
         MagicalContainer::AscendingIterator it = MagicalContainer::AscendingIterator(*this);
         return it;
     }
@@ -202,6 +202,45 @@ namespace ariel {
         return this->idx > other.idx && &this->container == &other.container;
     }
 
+    int MagicalContainer::SideCrossIterator::operator*() const {
+     if(this->tail != nullptr && this->odd )
+        return this->tail->getData();
+     if (this->head != nullptr){
+         return this->head->getData();
+     }
+
+        throw runtime_error("Cannot dereference end iterator");
+    }
+
+    MagicalContainer::SideCrossIterator &MagicalContainer::SideCrossIterator::operator++() {
+        if (*this == this->end()) {
+            throw runtime_error("Cannot increment end iterator");
+        }
+        if (this->head == this->tail) {
+            this->head = nullptr;
+            this->tail = nullptr;
+            return *this;
+        }
+        if (this->odd) {
+            this->tail = this->tail->prev;
+            this->odd = false;
+        } else {
+            this->head = this->head->next;
+            this->odd = true;
+            ++this->idx;
+        }
+        if(this->tail->next != nullptr && this->tail->next == this->head){
+            this->head = nullptr;
+            this->tail = nullptr;
+        }
+        return *this;
+    }
+    //begin
+    //end
+
+    /***********************************************/
+    /* PrimeIterator */
+    /***********************************************/
 
 
 

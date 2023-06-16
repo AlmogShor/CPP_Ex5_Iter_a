@@ -11,12 +11,12 @@
 struct Node {
     int data;
     Node *next;
-    Node *back;
+    Node *prev;
 
-    Node(int value) : data(value), next(nullptr), back(nullptr) {}
+    Node(int value) : data(value), next(nullptr), prev(nullptr) {}
 
     bool operator==(const Node &other) const {
-        return other.data == data && other.next == next && other.back == back;
+        return other.data == data && other.next == next && other.prev == prev;
     }
 
     int getData() const {

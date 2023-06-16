@@ -23,11 +23,11 @@ void linkedList::insert(int value){
     }
     else if (value < head->data) { // insert at head
         newNode->next = head;
-        head->back = newNode;
+        head->prev = newNode;
         head = newNode;
     }
     else if (value > tail->data) { // insert at tail
-        newNode->back = tail;
+        newNode->prev = tail;
         tail->next = newNode;
         tail = newNode;
     }
@@ -38,9 +38,9 @@ void linkedList::insert(int value){
         }
 
         newNode->next = current->next;
-        current->next->back = newNode;
+        current->next->prev = newNode;
         current->next = newNode;
-        newNode->back = current;
+        newNode->prev = current;
     }
     this->size++;
 }
@@ -73,7 +73,7 @@ void linkedList::remove(int elem){
                 tail = curr;
             }
             else {
-                curr->next->back = curr;
+                curr->next->prev = curr;
             }
             delete temp;
             size--;
