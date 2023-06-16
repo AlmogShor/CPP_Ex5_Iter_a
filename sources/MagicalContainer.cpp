@@ -137,5 +137,72 @@ namespace ariel {
         return *this;
     }
 
+    MagicalContainer::AscendingIterator MagicalContainer::AscenedingIterator::begin(){
+        MagicalContainer::AscendingIterator it = MagicalContainer::AscendingIterator(*this);
+        return it;
+    }
+
+    MagicalContainer::AscendingIterator MagicalContainer::AscendingIterator::end(){
+        MagicalContainer::AscendingIterator it = MagicalContainer::AscendingIterator(*this, nullptr);
+
+        it.idx = -1;
+        return it;
+    }
+
+    /***********************************************/
+    /* SideCrossIterator */
+    /***********************************************/
+
+    MagicalContainer::SideCrossIterator::SideCrossIterator(ariel::MagicalContainer &cont): container(cont), head(cont.ascendingList.getHead()), tail(cont.ascendingList.getTail()), current(cont.ascendingList.getHead()), idx(0) {
+
+    }
+
+    // Copy constructor
+    MagicalContainer::SideCrossIterator::SideCrossIterator(const SideCrossIterator &other) = default;
+
+    //move constructor
+    MagicalContainer::SideCrossIterator::SideCrossIterator(SideCrossIterator &&other) = default;
+
+    //dtor
+    MagicalContainer::SideCrossIterator::~SideCrossIterator() = default;
+
+    //copy assignment
+    MagicalContainer::SideCrossIterator &MagicalContainer::SideCrossIterator::operator=(const SideCrossIterator &other) {
+        if (&this->container != &other.container) {
+            throw runtime_error("Cannot assign iterators of different containers");
+        }
+        if (this != &other) {
+            this->container = other.container;
+            this->current = other.current;
+            this->idx = other.idx;
+        }
+        return *this;
+    }
+
+    // Move assignment
+
+    MagicalContainer::SideCrossIterator &MagicalContainer::SideCrossIterator::operator=(SideCrossIterator &&other) = default;
+
+    //operators
+
+    //comparison
+    bool MagicalContainer::SideCrossIterator::operator==(const SideCrossIterator &other) const {
+        return this->current == other.current && &this->container == &other.container;
+    }
+
+    bool MagicalContainer::SideCrossIterator::operator!=(const SideCrossIterator &other) const {
+        return !(*this == other);
+    }
+
+    bool MagicalContainer::SideCrossIterator::operator<(const SideCrossIterator &other) const {
+        return this->idx < other.idx && &this->container == &other.container;
+    }
+
+    bool MagicalContainer::SideCrossIterator::operator>(const SideCrossIterator &other) const {
+        return this->idx > other.idx && &this->container == &other.container;
+    }
+
+
+
 
 }

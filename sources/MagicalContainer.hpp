@@ -63,6 +63,15 @@ namespace ariel {
             AscendingIterator(MagicalContainer &container, Node *curr);
 
             AscendingIterator(const AscendingIterator &other);
+            // Move constructor
+            AscendingIterator(AscendingIterator &&other)
+
+            noexcept;
+
+            // Move assignment operator
+            AscendingIterator &operator=(AscendingIterator &&other)
+
+            noexcept;
 
             ~AscendingIterator();
 
@@ -83,16 +92,6 @@ namespace ariel {
             AscendingIterator begin() const;
 
             AscendingIterator end() const;
-
-            // Move constructor
-            AscendingIterator(AscendingIterator &&other)
-
-            noexcept;
-
-            // Move assignment operator
-            AscendingIterator &operator=(AscendingIterator &&other)
-
-            noexcept;
         };
 
         class SideCrossIterator {
@@ -106,6 +105,15 @@ namespace ariel {
             SideCrossIterator(MagicalContainer &cont);
 
             SideCrossIterator(const SideCrossIterator &other);
+            // Move constructor
+            SideCrossIterator(SideCrossIterator &&other)
+
+            noexcept;
+
+            // Move assignment operator
+            SideCrossIterator &operator=(SideCrossIterator &&other)
+
+            noexcept;
 
             ~SideCrossIterator();
 
@@ -127,15 +135,7 @@ namespace ariel {
 
             SideCrossIterator end() const;
 
-            // Move constructor
-            SideCrossIterator(SideCrossIterator &&other)
 
-            noexcept;
-
-            // Move assignment operator
-            SideCrossIterator &operator=(SideCrossIterator &&other)
-
-            noexcept;
         };
 
         class PrimeIterator {
