@@ -18,6 +18,10 @@ struct Node {
     bool operator==(const Node &other) const {
         return other.data == data && other.next == next && other.back == back;
     }
+
+    int getData() const {
+        return data;
+    }
 };
 
 class linkedList {

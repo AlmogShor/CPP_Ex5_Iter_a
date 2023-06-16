@@ -49,7 +49,7 @@ namespace ariel {
         }
     }
 
-    size_t MagicalContainer::size()  {
+    size_t MagicalContainer::size() {
         return this->ascendingList.getSize();
     }
 
@@ -57,21 +57,85 @@ namespace ariel {
     /* AscendingIterator */
     /***********************************************/
 
-    MagicalContainer::AscendingIterator::AscendingIterator(MagicalContainer &container) : container(container){
-        if(container.size() != 0){
+    MagicalContainer::AscendingIterator::AscendingIterator(MagicalContainer &container) : container(container) {
+        if (container.size() != 0) {
             this->current = container.ascendingList.getHead();
             this->idx = 0;
-        }
-        else{
+        } else {
             this->current = nullptr;
             this->idx = -1;
         }
     }
 
- MagicalContainer::AscendingIterator::AscendingIterator(ariel::MagicalContainer &container, Node *curr): container(container), current(curr) {
+    MagicalContainer::AscendingIterator::AscendingIterator(ariel::MagicalContainer &container, Node *curr) : container(
+            container), current(curr) {
         this->idx = 0;
     }
-    // MagicalContainer::AscendingIterator::AscendingIterator(const MagicalContainer::AscendingIterator &other): container(other.container), current(other.current), idx(other.idx) {}
+
+    // Copy constructor
+    MagicalContainer::AscendingIterator::AscendingIterator(const AscendingIterator &other) = default;
+
+    //move constructor
+    MagicalContainer::AscendingIterator::AscendingIterator(AscendingIterator &&other)
+
+    noexcept =
+    default;
+
+    //dtor
+    MagicalContainer::AscendingIterator::~AscendingIterator() = default;
+
+    //copy assignment
+    MagicalContainer::AscendingIterator &
+    MagicalContainer::AscendingIterator::operator=(const AscendingIterator &other) {
+        if (&this->container != &other.container) {
+            throw runtime_error("Cannot assign iterators of different containers");
+        }
+        if (this != &other) {
+            this->container = other.container;
+            this->current = other.current;
+            this->idx = other.idx;
+        }
+        return *this;
+    }
+
+    //operators
+
+    //comparison
+    bool MagicalContainer::AscendingIterator::operator==(const AscendingIterator &other) const {
+        return this->current == other.current && &this->container == &other.container;
+    }
+
+    bool MagicalContainer::AscendingIterator::operator!=(const AscendingIterator &other) const {
+        return !(*this == other);
+    }
+
+    bool MagicalContainer::AscendingIterator::operator<(const AscendingIterator &other) const {
+        return this->idx < other.idx && &this->container == &other.container;
+    }
+
+    bool MagicalContainer::AscendingIterator::operator>(const AscendingIterator &other) const {
+        return this->idx > other.idx && &this->container == &other.container;
+    }
+
+
+    int MagicalContainer::AscendingIterator::operator*() const {
+        return this->current->getData();
+    }
+
+    MagicalContainer::AscendingIterator &MagicalContainer::AscendingIterator::operator++() {
+        if (*this == this->end()) {
+            throw runtime_error("Cannot increment end iterator");
+        }
+        if (this->current->next != nullptr) {
+            this->current = this->current->next;
+            this->idx++;
+        }
+        else{
+            this->current = nullptr;
+
+        }
+        return *this;
+    }
 
 
 }
