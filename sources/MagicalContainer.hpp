@@ -63,6 +63,7 @@ namespace ariel {
             AscendingIterator(MagicalContainer &container, Node *curr);
 
             AscendingIterator(const AscendingIterator &other);
+
             // Move constructor
             AscendingIterator(AscendingIterator &&other)
 
@@ -89,9 +90,9 @@ namespace ariel {
 
             AscendingIterator &operator++();
 
-            AscendingIterator begin() ;
+            AscendingIterator begin();
 
-            AscendingIterator end() ;
+            AscendingIterator end();
         };
 
         class SideCrossIterator {
@@ -100,12 +101,13 @@ namespace ariel {
             Node *tail;
             Node *head;
             bool odd;
-            int idx=0;
+            int idx = 0;
 
         public:
             SideCrossIterator(MagicalContainer &cont);
 
             SideCrossIterator(const SideCrossIterator &other);
+
             // Move constructor
             SideCrossIterator(SideCrossIterator &&other)
 
@@ -132,9 +134,9 @@ namespace ariel {
 
             SideCrossIterator &operator++();
 
-            SideCrossIterator begin() const;
+            SideCrossIterator begin();
 
-            SideCrossIterator end() const;
+            SideCrossIterator end();
 
 
         };
@@ -142,14 +144,25 @@ namespace ariel {
         class PrimeIterator {
         private:
             MagicalContainer &container;
-            size_t currentIndex;
+            size_t currentIdx;
 
         public:
             PrimeIterator(MagicalContainer &cont, size_t index = 0);
 
             PrimeIterator(const PrimeIterator &other);
 
-            ~PrimeIterator();
+            // Move constructor
+            PrimeIterator(PrimeIterator &&other)
+
+            noexcept;
+
+            // Move assignment operator
+            PrimeIterator &operator=(PrimeIterator &&other)
+
+            noexcept;
+
+            //dtor
+            ~PrimeIterator(){}
 
             PrimeIterator &operator=(const PrimeIterator &other);
 
@@ -169,15 +182,7 @@ namespace ariel {
 
             PrimeIterator end() const;
 
-            // Move constructor
-            PrimeIterator(PrimeIterator &&other)
 
-            noexcept;
-
-            // Move assignment operator
-            PrimeIterator &operator=(PrimeIterator &&other)
-
-            noexcept;
         };
     };
 }

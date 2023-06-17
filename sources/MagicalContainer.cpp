@@ -129,20 +129,19 @@ namespace ariel {
         if (this->current->next != nullptr) {
             this->current = this->current->next;
             this->idx++;
-        }
-        else{
+        } else {
             this->current = nullptr;
 
         }
         return *this;
     }
 
-    MagicalContainer::AscendingIterator MagicalContainer::AscendingIterator::begin(){
+    MagicalContainer::AscendingIterator MagicalContainer::AscendingIterator::begin() {
         MagicalContainer::AscendingIterator it = MagicalContainer::AscendingIterator(*this);
         return it;
     }
 
-    MagicalContainer::AscendingIterator MagicalContainer::AscendingIterator::end(){
+    MagicalContainer::AscendingIterator MagicalContainer::AscendingIterator::end() {
         MagicalContainer::AscendingIterator it = MagicalContainer::AscendingIterator(this->container, nullptr);
 
         it.idx = -1;
@@ -153,7 +152,10 @@ namespace ariel {
     /* SideCrossIterator */
     /***********************************************/
 
-    MagicalContainer::SideCrossIterator::SideCrossIterator(ariel::MagicalContainer &cont): container(cont), head(cont.ascendingList.getHead()), tail(cont.ascendingList.getTail()), head(cont.ascendingList.getHead()), idx(0) {
+    MagicalContainer::SideCrossIterator::SideCrossIterator(ariel::MagicalContainer &cont) : container(cont),
+                                                                                            head(cont.ascendingList.getHead()),
+                                                                                            tail(cont.ascendingList.getLast()),
+                                                                                            idx(0) {
 
     }
 
@@ -161,97 +163,134 @@ namespace ariel {
     MagicalContainer::SideCrossIterator::SideCrossIterator(const SideCrossIterator &other) = default;
 
     //move constructor
-    MagicalContainer::SideCrossIterator::SideCrossIterator(SideCrossIterator &&other) noexcept: container(other.container), head(other.head), tail(other.tail), odd(other.odd), idx(other.idx) {
+    MagicalContainer::SideCrossIterator::SideCrossIterator(SideCrossIterator &&other)
 
+    noexcept:
+    container(other
+    .container),
+    head(other
+    .head),
+    tail(other
+    .tail),
+    odd(other
+    .odd),
+    idx(other
+    .idx) {
+
+}
+
+//dtor
+MagicalContainer::SideCrossIterator::~SideCrossIterator() = default;
+
+//copy assignment
+MagicalContainer::SideCrossIterator &MagicalContainer::SideCrossIterator::operator=(const SideCrossIterator &other) {
+    if (&this->container != &other.container) {
+        throw runtime_error("Cannot assign iterators of different containers");
     }
-
-    //dtor
-    MagicalContainer::SideCrossIterator::~SideCrossIterator() = default;
-
-    //copy assignment
-    MagicalContainer::SideCrossIterator &MagicalContainer::SideCrossIterator::operator=(const SideCrossIterator &other) {
-        if (&this->container != &other.container) {
-            throw runtime_error("Cannot assign iterators of different containers");
-        }
-        if (this != &other) {
-            this->container = other.container;
-            this->head = other.head;
-            this->tail = other.tail;
-            this->idx = other.idx;
-        }
-        return *this;
-    }
-
-    // Move assignment
-
-    MagicalContainer::SideCrossIterator &MagicalContainer::SideCrossIterator::operator=(SideCrossIterator &&other) noexcept  {
+    if (this != &other) {
         this->container = other.container;
         this->head = other.head;
         this->tail = other.tail;
         this->idx = other.idx;
-        other.idx = -1;
-        return *this;
     }
-
-    //operators
-
-    //comparison
-    bool MagicalContainer::SideCrossIterator::operator==(const SideCrossIterator &other) const {
-        return this->head == other.head && this->tail == other.tail && &this->container == &other.container;
-    }
-
-    bool MagicalContainer::SideCrossIterator::operator!=(const SideCrossIterator &other) const {
-        return !(*this == other);
-    }
-
-    bool MagicalContainer::SideCrossIterator::operator<(const SideCrossIterator &other) const {
-        return this->idx < other.idx && &this->container == &other.container;
-    }
-
-    bool MagicalContainer::SideCrossIterator::operator>(const SideCrossIterator &other) const {
-        return this->idx > other.idx && &this->container == &other.container;
-    }
-
-    int MagicalContainer::SideCrossIterator::operator*() const {
-     if(this->tail != nullptr && this->odd )
-        return this->tail->getData();
-     if (this->head != nullptr){
-         return this->head->getData();
-     }
-
-        throw runtime_error("Cannot dereference end iterator");
-    }
-
-    MagicalContainer::SideCrossIterator &MagicalContainer::SideCrossIterator::operator++() {
-        if (*this == this->end()) {
-            throw runtime_error("Cannot increment end iterator");
-        }
-        if (this->head == this->tail) {
-            this->head = nullptr;
-            this->tail = nullptr;
-            return *this;
-        }
-        if (this->odd) {
-            this->tail = this->tail->prev;
-            this->odd = false;
-        } else {
-            this->head = this->head->next;
-            this->odd = true;
-            ++this->idx;
-        }
-        if(this->tail->next != nullptr && this->tail->next == this->head){
-            this->head = nullptr;
-            this->tail = nullptr;
-        }
-        return *this;
-    }
-    //begin
-    //end
-
-    /***********************************************/
-    /* PrimeIterator */
-    /***********************************************/
-
-
-
+    return *this;
 }
+
+// Move assignment
+
+MagicalContainer::SideCrossIterator &MagicalContainer::SideCrossIterator::operator=(SideCrossIterator &&other)
+
+noexcept  {
+this->
+container = other.container;
+this->
+head = other.head;
+this->
+tail = other.tail;
+this->
+idx = other.idx;
+other.
+idx = -1;
+return *this;
+}
+
+//operators
+
+//comparison
+bool MagicalContainer::SideCrossIterator::operator==(const SideCrossIterator &other) const {
+    return this->head == other.head && this->tail == other.tail && &this->container == &other.container;
+}
+
+bool MagicalContainer::SideCrossIterator::operator!=(const SideCrossIterator &other) const {
+    return !(*this == other);
+}
+
+bool MagicalContainer::SideCrossIterator::operator<(const SideCrossIterator &other) const {
+    return this->idx < other.idx && &this->container == &other.container;
+}
+
+bool MagicalContainer::SideCrossIterator::operator>(const SideCrossIterator &other) const {
+    return this->idx > other.idx && &this->container == &other.container;
+}
+
+int MagicalContainer::SideCrossIterator::operator*() const {
+    if (this->tail != nullptr && this->odd)
+        return this->tail->getData();
+    if (this->head != nullptr) {
+        return this->head->getData();
+    }
+
+    throw runtime_error("Cannot dereference end iterator");
+}
+
+MagicalContainer::SideCrossIterator &MagicalContainer::SideCrossIterator::operator++() {
+    if (*this == this->end()) {
+        throw runtime_error("Cannot increment end iterator");
+    }
+    if (this->head == this->tail) {
+        this->head = nullptr;
+        this->tail = nullptr;
+        return *this;
+    }
+    if (this->odd) {
+        this->tail = this->tail->prev;
+        this->odd = false;
+    } else {
+        this->head = this->head->next;
+        this->odd = true;
+        ++this->idx;
+    }
+    if (this->tail->next != nullptr && this->tail->next == this->head) {
+        this->head = nullptr;
+        this->tail = nullptr;
+    }
+    return *this;
+}
+
+//begin
+MagicalContainer::SideCrossIterator MagicalContainer::SideCrossIterator::begin() {
+    MagicalContainer::SideCrossIterator iter = MagicalContainer::SideCrossIterator(this->container);
+    return iter;
+}
+
+//end
+MagicalContainer::SideCrossIterator MagicalContainer::SideCrossIterator::end() {
+    MagicalContainer::SideCrossIterator iter = MagicalContainer::SideCrossIterator(this->container);
+    iter.head = nullptr;
+    iter.tail = nullptr;
+    if (this->container.size() % 2 != 0)
+        iter.odd = true;
+    return iter;
+}
+
+/***********************************************/
+/* PrimeIterator */
+/***********************************************/
+
+//dtor is in the header file
+
+//ctors
+
+
+
+} // namespace ariel
