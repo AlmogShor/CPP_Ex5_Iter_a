@@ -292,7 +292,7 @@ MagicalContainer::SideCrossIterator MagicalContainer::SideCrossIterator::end() {
 //ctors
 
 MagicalContainer::PrimeIterator::PrimeIterator(MagicalContainer &container, size_t idx) : container(container),
-                                                                                              currentIdx(idx) {}
+                                                                                          currentIdx(idx) {}
 
 // Copy constructor
 MagicalContainer::PrimeIterator::PrimeIterator(const PrimeIterator &other) = default;
@@ -334,6 +334,57 @@ currentIdx = other.currentIdx;
 
 }
 return *this;
+}
+
+bool
+MagicalContainer::PrimeIterator::operator==(const PrimeIterator &other) const {
+    return &this->container == &other.container && this->currentIdx == other.currentIdx;
+}
+
+bool
+MagicalContainer::PrimeIterator::operator!=(const PrimeIterator &other) const {
+    return !(*this == other);
+}
+
+bool
+MagicalContainer::PrimeIterator::operator>(const PrimeIterator &other) const {
+    return this->currentIdx > other.currentIdx && &this->container == &other.container;
+}
+
+bool
+MagicalContainer::PrimeIterator::operator<(const PrimeIterator &other) const {
+    return this->currentIdx < other.currentIdx && &this->container == &other.container;
+}
+
+
+int
+MagicalContainer::PrimeIterator::operator*() const{
+    if (this->currentIdx >= this->container.primePointers.size()) {
+        throw runtime_error("Cannot dereference end iterator");
+    }
+    return *(this->container.primePointers[this->currentIdx]);
+}
+
+MagicalContainer::PrimeIterator &
+MagicalContainer::PrimeIterator::operator++(){
+    if (*this == this->end()) {
+        throw runtime_error("Cannot increment end iterator");
+    }
+    ++this->currentIdx;
+    return *this;
+}
+
+MagicalContainer::PrimeIterator
+MagicalContainer::PrimeIterator::begin(){
+    MagicalContainer::PrimeIterator iter = MagicalContainer::PrimeIterator(this->container, 0);
+    return iter;
+}
+
+
+MagicalContainer::PrimeIterator
+MagicalContainer::PrimeIterator::end(){
+    MagicalContainer::PrimeIterator iter = MagicalContainer::PrimeIterator(this->container, this->container.primePointers.size());
+    return iter;
 }
 
 

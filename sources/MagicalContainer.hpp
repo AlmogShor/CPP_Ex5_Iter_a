@@ -164,6 +164,7 @@ namespace ariel {
             //dtor
             ~PrimeIterator(){}
 
+            //copy assignment
             PrimeIterator &operator=(const PrimeIterator &other);
 
             bool operator==(const PrimeIterator &other) const;
@@ -178,9 +179,9 @@ namespace ariel {
 
             PrimeIterator &operator++();
 
-            PrimeIterator begin() const;
+            PrimeIterator begin();
 
-            PrimeIterator end() const;
+            PrimeIterator end();
 
 
         };
