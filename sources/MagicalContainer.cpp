@@ -291,6 +291,50 @@ MagicalContainer::SideCrossIterator MagicalContainer::SideCrossIterator::end() {
 
 //ctors
 
+MagicalContainer::PrimeIterator::PrimeIterator(MagicalContainer &container, size_t idx) : container(container),
+                                                                                              currentIdx(idx) {}
+
+// Copy constructor
+MagicalContainer::PrimeIterator::PrimeIterator(const PrimeIterator &other) = default;
+
+//move constructor
+
+MagicalContainer::PrimeIterator::PrimeIterator(PrimeIterator &&other)
+
+noexcept:
+container(other
+.container),
+currentIdx(other
+.currentIdx) {
+other.
+currentIdx = size_t(-1);
+}
+
+//copy assignment
+MagicalContainer::PrimeIterator &MagicalContainer::PrimeIterator::operator=(const PrimeIterator &other) {
+    if (&this->container != &other.container) {
+        throw runtime_error("Cannot assign iterators of different containers");
+    }
+    if (this != &other) {
+        this->container = other.container;
+        this->currentIdx = other.currentIdx;
+    }
+    return *this;
+}
+
+// Move assignment
+MagicalContainer::PrimeIterator &MagicalContainer::PrimeIterator::operator=(PrimeIterator &&other)
+
+noexcept {
+if (this != &other) {
+this->
+container = other.container;
+this->
+currentIdx = other.currentIdx;
+
+}
+return *this;
+}
 
 
 } // namespace ariel
