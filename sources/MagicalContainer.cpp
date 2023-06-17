@@ -143,7 +143,7 @@ namespace ariel {
     }
 
     MagicalContainer::AscendingIterator MagicalContainer::AscendingIterator::end(){
-        MagicalContainer::AscendingIterator it = MagicalContainer::AscendingIterator(*this, nullptr);
+        MagicalContainer::AscendingIterator it = MagicalContainer::AscendingIterator(this->container, nullptr);
 
         it.idx = -1;
         return it;
@@ -153,7 +153,7 @@ namespace ariel {
     /* SideCrossIterator */
     /***********************************************/
 
-    MagicalContainer::SideCrossIterator::SideCrossIterator(ariel::MagicalContainer &cont): container(cont), head(cont.ascendingList.getHead()), tail(cont.ascendingList.getTail()), current(cont.ascendingList.getHead()), idx(0) {
+    MagicalContainer::SideCrossIterator::SideCrossIterator(ariel::MagicalContainer &cont): container(cont), head(cont.ascendingList.getHead()), tail(cont.ascendingList.getTail()), head(cont.ascendingList.getHead()), idx(0) {
 
     }
 
@@ -161,7 +161,9 @@ namespace ariel {
     MagicalContainer::SideCrossIterator::SideCrossIterator(const SideCrossIterator &other) = default;
 
     //move constructor
-    MagicalContainer::SideCrossIterator::SideCrossIterator(SideCrossIterator &&other) = default;
+    MagicalContainer::SideCrossIterator::SideCrossIterator(SideCrossIterator &&other) noexcept: container(other.container), head(other.head), tail(other.tail), odd(other.odd), idx(other.idx) {
+
+    }
 
     //dtor
     MagicalContainer::SideCrossIterator::~SideCrossIterator() = default;
@@ -173,7 +175,8 @@ namespace ariel {
         }
         if (this != &other) {
             this->container = other.container;
-            this->current = other.current;
+            this->head = other.head;
+            this->tail = other.tail;
             this->idx = other.idx;
         }
         return *this;
@@ -181,13 +184,20 @@ namespace ariel {
 
     // Move assignment
 
-    MagicalContainer::SideCrossIterator &MagicalContainer::SideCrossIterator::operator=(SideCrossIterator &&other) = default;
+    MagicalContainer::SideCrossIterator &MagicalContainer::SideCrossIterator::operator=(SideCrossIterator &&other) noexcept  {
+        this->container = other.container;
+        this->head = other.head;
+        this->tail = other.tail;
+        this->idx = other.idx;
+        other.idx = -1;
+        return *this;
+    }
 
     //operators
 
     //comparison
     bool MagicalContainer::SideCrossIterator::operator==(const SideCrossIterator &other) const {
-        return this->current == other.current && &this->container == &other.container;
+        return this->head == other.head && this->tail == other.tail && &this->container == &other.container;
     }
 
     bool MagicalContainer::SideCrossIterator::operator!=(const SideCrossIterator &other) const {

@@ -89,9 +89,9 @@ namespace ariel {
 
             AscendingIterator &operator++();
 
-            AscendingIterator begin() const;
+            AscendingIterator begin() ;
 
-            AscendingIterator end() const;
+            AscendingIterator end() ;
         };
 
         class SideCrossIterator {
@@ -100,6 +100,7 @@ namespace ariel {
             Node *tail;
             Node *head;
             bool odd;
+            int idx=0;
 
         public:
             SideCrossIterator(MagicalContainer &cont);
