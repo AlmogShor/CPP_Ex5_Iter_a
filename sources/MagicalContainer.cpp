@@ -39,14 +39,16 @@ namespace ariel {
 
     void MagicalContainer::removeElement(int elem) {
         this->ascendingList.remove(elem);
-        this->endOfSideCross = this->ascendingList.at(this->size() / 2);
-        if (isPrime(elem)) {
-            int *p = new int(elem);
-            auto prime_ptr_insertion_point = lower_bound(primePointers.begin(), primePointers.end(), p,
-                                                         [](int *a, int *b) { return *a < *b; });
-            primePointers.erase(prime_ptr_insertion_point);
-            delete p;
+        for (auto it = primePointers.begin(); it != primePointers.end(); ++it)
+        {
+            if (**it == elem)
+            {
+                delete *it;
+                primePointers.erase(it);
+                break;
+            }
         }
+        this->endOfSideCross = this->ascendingList.at(this->size() / 2);
     }
 
     size_t MagicalContainer::size() {

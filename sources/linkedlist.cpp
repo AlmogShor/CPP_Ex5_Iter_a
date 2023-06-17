@@ -7,7 +7,7 @@
 linkedList::linkedList() : head(nullptr), tail(nullptr) {}
 
 
-linkedList::~linkedList(){
+linkedList::~linkedList() {
     Node *curr = head;
     while (curr != nullptr) {
         Node *temp = curr;
@@ -15,23 +15,21 @@ linkedList::~linkedList(){
         delete temp;
     }
 }
-void linkedList::insert(int value){
+
+void linkedList::insert(int value) {
     Node *newNode = new Node(value);
     if (head == nullptr) { // empty list
         head = newNode;
         tail = newNode;
-    }
-    else if (value < head->data) { // insert at head
+    } else if (value < head->data) { // insert at head
         newNode->next = head;
         head->prev = newNode;
         head = newNode;
-    }
-    else if (value > tail->data) { // insert at tail
+    } else if (value > tail->data) { // insert at tail
         newNode->prev = tail;
         tail->next = newNode;
         tail = newNode;
-    }
-    else { // middle
+    } else { // middle
         Node *current = head;
         while (value >= current->next->data) { // find location
             current = current->next;
@@ -45,7 +43,7 @@ void linkedList::insert(int value){
     this->size++;
 }
 
-void linkedList::remove(int elem){
+void linkedList::remove(int elem) {
     if (head == nullptr) {
         return;
     }
@@ -65,37 +63,36 @@ void linkedList::remove(int elem){
     }
 
     Node *curr = head;
-    while (curr->next != nullptr) {
-        if (curr->next->data == elem) {
-            Node *temp = curr->next;
-            curr->next = curr->next->next;
-            if (curr->next == nullptr) {
-                tail = curr;
-            }
-            else {
-                curr->next->prev = curr;
-            }
-            delete temp;
-            size--;
-            return;
-        }
+    while (curr->next != nullptr && curr->next->data != elem)
         curr = curr->next;
+if (curr->next != nullptr) {
+
+    Node *tmp = curr->next;
+    curr->next = curr->next->next;
+    if (curr->next== nullptr) {
+        tail = curr;
     }
+    delete tmp;
+    size--;
+}else {
+    throw std::runtime_error("Element not found");
 }
 
-size_t linkedList::getSize(){
+}
+
+size_t linkedList::getSize() {
     return this->size;
 }
 
-Node *linkedList::getLast(){
+Node *linkedList::getLast() {
     return this->tail;
 }
 
-Node *linkedList::getHead(){
+Node *linkedList::getHead() {
     return this->head;
 }
 
-Node *linkedList::at(size_t index){
+Node *linkedList::at(size_t index) {
     if (index >= size) {
         return nullptr;
     }
@@ -106,7 +103,7 @@ Node *linkedList::at(size_t index){
     return curr;
 }
 
-void linkedList::display(){
+void linkedList::display() {
     Node *curr = head;
     while (curr != nullptr) {
         std::cout << curr->data << " ";
